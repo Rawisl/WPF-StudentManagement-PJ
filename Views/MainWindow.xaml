@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:WPF_StudentManagement_Project"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="Sidebar" Width="250"/>
+            <ColumnDefinition x:Name="Main_Content" Width="*"/>
+        </Grid.ColumnDefinitions>
     </Grid>
 </Window>
