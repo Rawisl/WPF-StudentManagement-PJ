@@ -4,9 +4,174 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_StudentManagement_Project.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="2000" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid HorizontalAlignment="Center" Grid.Row="0" Margin="0,0,0,0" VerticalAlignment="Top" Width="800">
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Thay đổi quy định" VerticalAlignment="Center" FontSize="36" TextAlignment="Center" FontWeight="Bold"/>
+            <Button x:Name="SaveBtn" Content="Lưu thay đổi" HorizontalAlignment="Right" Height="78" 
+                    VerticalAlignment="Center" Width="174" FontSize="27" 
+                    Foreground="White" Background="#FF0006FF">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="15"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+
+        <ScrollViewer HorizontalAlignment="Center" VerticalAlignment="Top" Width="800" Grid.Row="1">
+            <StackPanel Margin="20">
+
+                <materialDesign:Card Margin="0,0,0,20" Padding="20" UniformCornerRadius="30" BorderBrush="Black" BorderThickness="3">
+                    <StackPanel>
+                        <TextBlock Text="Quy định về Tuổi" FontSize="22" FontWeight="Bold" Margin="0,0,0,15" Foreground="#FF1A237E"/>
+                        <Separator Margin="0,0,0,15" Background="#F0F0F0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <Label Content="Tuổi tối thiểu:" Foreground="Black" Margin="0,0,0,5" FontSize="20" FontWeight="Bold"/>
+                                <Border Background="#F3F5F9" CornerRadius="20" Height="45" BorderBrush="Black" BorderThickness="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="txtTuoiMin" Text="18" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
+                                            <Button Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangTuoiMin_Click"/>
+                                            <Button Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamTuoiMin_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <Label Content="Tuổi tối đa:" Foreground="Black" Margin="0,0,0,5" FontSize="20" FontWeight="Bold"/>
+                                <Border Background="#F3F5F9" CornerRadius="20" Height="45" BorderBrush="Black" BorderThickness="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="txtTuoiMax" Text="30" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
+                                            <Button Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangTuoiMax_Click"/>
+                                            <Button Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamTuoiMax_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Margin="0,0,0,20" Padding="20" UniformCornerRadius="30" BorderBrush="Black" BorderThickness="3">
+                    <StackPanel>
+                        <TextBlock Text="Quy định về Lớp học" FontSize="22" FontWeight="Bold" Margin="0,0,0,15" Foreground="#FF1A237E"/>
+                        <Separator Margin="0,0,0,15" Background="#F0F0F0"/>
+
+                        <Label Content="Sĩ số tối đa:" Foreground="Black" Margin="0,0,0,5" FontSize="20" FontWeight="Bold"/>
+                        <Border Background="#F3F5F9" CornerRadius="20" Height="45" Width="300" HorizontalAlignment="Left" Margin="0,0,0,20" BorderBrush="Black" BorderThickness="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtSiSoMax" Text="36" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
+                                    <Button x:Name="TangSiSoBtn" Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangSiSo_Click"/>
+                                    <Button x:Name="GiamSiSoBtn" Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamSiSo_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="Cấu hình danh sách lớp:" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="16"/>
+                            <Button x:Name="ThemLopBtn" Content="+ Thêm lớp" HorizontalAlignment="Left" Background="Transparent" BorderThickness="0" Foreground="#FF270EDC" FontWeight="Bold" Margin="630,0,0,0" Click="btnThemLop_Click"/>
+                        </Grid>
+
+                        <DataGrid x:Name="dgLopHoc" AutoGenerateColumns="False" CanUserAddRows="False" Background="White" BorderThickness="1" BorderBrush="#F0F0F0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="STT" Binding="{Binding STT}" Width="60" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="Khối" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F3F5F9" CornerRadius="5" Margin="2">
+                                                <TextBox Text="{Binding Khoi}" BorderThickness="0" Background="Transparent" Padding="5,2"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Tên lớp" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F3F5F9" CornerRadius="5" Margin="2">
+                                                <TextBox Text="{Binding TenLop}" BorderThickness="0" Background="Transparent" Padding="5,2"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Xóa" Binding="{Binding XoaIcon}" Width="60" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card Margin="0,0,0,20" Padding="20" UniformCornerRadius="15" BorderBrush="Black" BorderThickness="3">
+                    <StackPanel>
+                        <TextBlock Text="Quy định về Môn học" FontSize="22" FontWeight="Bold" Margin="0,0,0,15" Foreground="#FF1A237E"/>
+                        <Separator Margin="0,0,0,15" Background="#F0F0F0"/>
+
+                        <Label Content="Điểm đạt (Pass score):" Foreground="Black" Margin="0,0,0,5" FontSize="20" FontWeight="Bold"/>
+                        <Border Background="#F3F5F9" CornerRadius="20" Height="45" Width="300" HorizontalAlignment="Left" Margin="0,0,0,20" BorderBrush="Black" BorderThickness="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtPassScore" Text="5.0" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
+                                    <Button x:Name="TangDiemBtn" Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangDiem_Click"/>
+                                    <Button x:Name="GiamDiemBtn" Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamDiem_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="Cấu hình danh sách môn học" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="16"/>
+                            <Button x:Name="ThemMonBtn" Content="+ Thêm môn" HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Foreground="#FF270EDC" FontWeight="Bold" Click="btnThemMon_Click"/>
+                        </Grid>
+
+                        <DataGrid x:Name="dgMonHoc" AutoGenerateColumns="False" CanUserAddRows="False" Background="White" BorderThickness="1" BorderBrush="#F0F0F0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="STT" Binding="{Binding STT}" Width="60" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="Tên môn học" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F3F5F9" CornerRadius="5" Margin="2">
+                                                <TextBox Text="{Binding TenMon}" BorderThickness="0" Background="Transparent" Padding="5,2"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Xóa" Binding="{Binding XoaIcon}" Width="60" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
