@@ -7,9 +7,21 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="MainGrid">
+        <!-- Grid chia giữa Sidebar và UserContent -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="Sidebar" Width="250"/>
             <ColumnDefinition x:Name="Main_Content" Width="*"/>
         </Grid.ColumnDefinitions>
+        <!-- StackPanel tránh các button đè nhau -->
+        <StackPanel x:Name="StPn_Button" HorizontalAlignment="Center" Height="304" VerticalAlignment="Center" Width="230">
+            <Button x:Name="Btn_TrangChu" Content="Trang chủ" Click="Btn_TrangChu_Click"/>
+            <Button x:Name="Btn_TiepNhanHS" Content="Tiếp nhận học sinh" Click="Btn_TiepNhanHS_Click"/>
+            <Button x:Name="Btn_LapDSL" Content="Lập danh sách lóp" Click="Btn_LapDSL_Click"/>
+            <Button x:Name="Btn_NhapDiemMon" Content="Nhập điểm môn học" Click="Btn_NhapDiemMon_Click"/>
+            <Button x:Name="Btn_BaoCao" Content="Báo cáo tổng kết" Click="Btn_BaoCao_Click"/>
+            <Button x:Name="Btn_ThayDoiQD" Content="Thay đổi quy định" Click="Btn_ThayDoiQD_Click"/>
+            <Button x:Name="Btn_CaiDat" Content="Cài đặt" Click="Btn_CaiDat_Click"/>
+        </StackPanel>
+        <ContentControl x:Name="MainContent" Grid.Column="1" Content="MainContentControl" HorizontalAlignment="Center" Margin="0,204,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
