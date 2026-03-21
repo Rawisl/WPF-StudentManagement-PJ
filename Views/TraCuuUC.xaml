@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <TextBlock HorizontalAlignment="Left" Height="169" Margin="142,112,0,0" TextWrapping="Wrap" Text="Đây là màn hình tra cứu" VerticalAlignment="Top" Width="465"/>
+
     </Grid>
 </UserControl>

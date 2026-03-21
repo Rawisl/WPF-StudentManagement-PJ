@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <TextBlock HorizontalAlignment="Left" Height="122" Margin="122,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="401"><Run Text="Đây là màn hình lập danh sách"/><LineBreak/><Run/></TextBlock>
+
     </Grid>
 </UserControl>
