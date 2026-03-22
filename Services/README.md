@@ -19,7 +19,7 @@ Nhớ **``using WPF_StudentManagement_Project.Services;``** nếu control có d�
 
 > Ví dụ 1.1: Lấy danh sách học sinh theo Mã Lớp
 
-```
+```csharp
 // Câu lệnh SQL: Lấy thông tin học sinh thuộc lớp cụ thể
 // Lưu ý: Có khoảng trắng trước hàm @MaLop
 string sqlGetStudents = "SELECT MaHocSinh, HoTen, GioiTinh, NgaySinh, Email FROM HOCSINH WHERE MaLop = @MaLop";
@@ -38,7 +38,7 @@ foreach (DataRow row in dtHocSinh.Rows)
 ```
 > Ví dụ 1.2: Lấy bảng điểm của một học sinh trong học kỳ 1
 
-```
+```csharp
 string sqlGetGrades = @"
     SELECT M.TenMonHoc, D.Diem15p, D.Diem1Tiet, D.DiemTB 
     FROM DIEMSO D 
@@ -52,7 +52,7 @@ DataTable dtDiemSo = DatabaseHelper.ExecuteQuery(sqlGetGrades, gradeParams);
 ### 2. Hàm ExecuteNonQuery (Dùng cho INSERT, UPDATE, DELETE)
 **Hàm này trả về số nguyên (int) đại diện cho số dòng bị tác động trong CSDL.**
 > Ví dụ 2.1: Thêm một học sinh mới (INSERT)
-```
+```csharp
 // Chuỗi SQL có khoảng trắng cẩn thận quanh các @tham_số, nếu query có xuống dòng thì bao @ bên ngoài query
 string sqlInsertHS = @"
     INSERT INTO HOCSINH (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email, MaLop) 
@@ -85,7 +85,7 @@ catch (SqlException ex)
 ```
 > Ví dụ 2.2: Cập nhật điểm số cho học sinh (UPDATE)
 
-```
+```csharp
 // Cập nhật điểm 15p và 1 tiết. Trigger TRG_TinhDiemTB sẽ tự tính lại DiemTB.
 string sqlUpdateDiem = "UPDATE DIEMSO SET Diem15p = @Diem15p , Diem1Tiet = @Diem1Tiet WHERE MaDiemSo = @MaDiemSo";
 
@@ -99,7 +99,7 @@ if (updatedRows > 0)
 ```
 > Ví dụ 2.3: Xóa một học sinh (DELETE)
 
-```
+```csharp
 // Xóa học sinh. Trigger TRG_UpdateSiSo sẽ tự động giảm sĩ số lớp.
 // Lưu ý: Phải xóa dữ liệu bảng DIEMSO của học sinh này trước do có khóa ngoại (FK_DIEMSO_HOCSINH).
 string sqlDeleteHS = "DELETE FROM HOCSINH WHERE MaHocSinh = @MaHocSinh";
@@ -122,7 +122,7 @@ if (deletedRows > 0)
 
 > Ví dụ cho HocSinh:
 
-```
+```csharp
 // Lấy danh sách: Gọi trực tiếp từ Class (hàm static)
 DataGridHocSinh.ItemsSource = HocSinh.LayDanhSach();
 
@@ -174,7 +174,7 @@ else
 HocSinh.Xoa("HS001");
 ```
 > Ví dụ cho Lop:
-```
+```csharp
 // Lấy danh sách Lớp: Đổ dữ liệu vào DataGrid khi vừa mở màn hình
 // Hàm LayDanhSach là static nên gọi trực tiếp từ tên Class
 DataGridLop.ItemsSource = Lop.LayDanhSach();
