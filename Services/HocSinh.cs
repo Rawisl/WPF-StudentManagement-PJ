@@ -15,9 +15,9 @@ namespace WPF_StudentManagement_Project.Services
         public DateTime NgaySinh { get; set; }
         public string? DiaChi { get; set; }
         public string? Email { get; set; }
-        public required string MaLop { get; set; }
+        // public required string MaLop { get; set; } DB structure changed
 
-        // 1. READ:
+        // READ:
         public static List<HocSinh> LayDanhSach() {
             List<HocSinh> danhSach = new List<HocSinh>();
             string query = "SELECT * FROM HocSinh";
@@ -27,7 +27,7 @@ namespace WPF_StudentManagement_Project.Services
             foreach (DataRow row in data.Rows) {
                 HocSinh hs = new HocSinh() {
                     MaHocSinh = row["MaHocSinh"] as string ?? "",
-                    MaLop = row["MaLop"] as string ?? "",
+                    // MaLop = row["MaLop"] as string ?? "",
                     HoTen = row["HoTen"] as string ?? "",
                     GioiTinh = row["GioiTinh"] as string ?? "",
                     DiaChi = row["DiaChi"] as string,
@@ -39,10 +39,10 @@ namespace WPF_StudentManagement_Project.Services
             return danhSach;
         }
 
-        // 2. CREATE:
+        // CREATE:
         public bool Them() {
-            string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email, MaLop) " +
-                           "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email , @MaLop )";
+            string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email) " +
+                           "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email)";
 
             object[] parameters = {
                 this.MaHocSinh,
@@ -51,16 +51,16 @@ namespace WPF_StudentManagement_Project.Services
                 this.NgaySinh,
                 this.DiaChi ?? (object)DBNull.Value,
                 this.Email ?? (object)DBNull.Value,
-                this.MaLop
+                // this.MaLop
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // 3. UPDATE:
+        // UPDATE:
         public bool Sua() {
             string query = "UPDATE HocSinh SET HoTen = @HoTen , GioiTinh = @GioiTinh , " +
-                           "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email , MaLop = @MaLop " +
+                           "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email " +
                            "WHERE MaHocSinh = @MaHocSinh";
 
             object[] parameters = {
@@ -69,14 +69,14 @@ namespace WPF_StudentManagement_Project.Services
                 this.NgaySinh,
                 this.DiaChi ?? (object)DBNull.Value,
                 this.Email ?? (object)DBNull.Value,
-                this.MaLop,
+                // this.MaLop,
                 this.MaHocSinh
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // 4. DELETE:
+        // DELETE:
         public static bool Xoa(string maHocSinh) {
             string query = "DELETE FROM HocSinh WHERE MaHocSinh = @MaHocSinh";
             object[] parameters = { maHocSinh };

@@ -14,7 +14,7 @@ namespace WPF_StudentManagement_Project.Services
         public int Khoi { get; set; }
         public int SiSo { get; set; }
 
-        // 1. READ
+        // READ
         public static List<Lop> LayDanhSach() {
             List<Lop> danhSach = new List<Lop>();
             string query = "SELECT * FROM Lop";
@@ -34,7 +34,7 @@ namespace WPF_StudentManagement_Project.Services
             return danhSach;
         }
 
-        // 2. CREATE
+        // CREATE
         public bool Them() {
             string query = "INSERT INTO Lop (MaLop, TenLop, Khoi, SiSo) " +
                            "VALUES ( @MaLop , @TenLop , @Khoi , @SiSo )";
@@ -49,7 +49,7 @@ namespace WPF_StudentManagement_Project.Services
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // 3. UPDATE
+        // UPDATE
         public bool Sua() {
             string query = "UPDATE Lop SET TenLop = @TenLop , Khoi = @Khoi , SiSo = @SiSo " +
                            "WHERE MaLop = @MaLop";
@@ -64,7 +64,7 @@ namespace WPF_StudentManagement_Project.Services
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // 4. DELETE
+        // DELETE
         public static bool Xoa(string maLop) {
             string query = "DELETE FROM Lop WHERE MaLop = @MaLop";
             object[] parameters = { maLop };
