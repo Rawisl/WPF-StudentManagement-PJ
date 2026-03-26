@@ -22,6 +22,6 @@
             <Button x:Name="Btn_ThayDoiQD" Content="Thay đổi quy định" Click="Btn_ThayDoiQD_Click"/>
             <Button x:Name="Btn_CaiDat" Content="Cài đặt" Click="Btn_CaiDat_Click"/>
         </StackPanel>
-        <ContentControl x:Name="MainContent" Grid.Column="1" Content="MainContentControl" HorizontalAlignment="Center" Margin="0,204,0,0" VerticalAlignment="Top"/>
+        <ContentControl x:Name="MainContent" Grid.Column="1" Content="MainContentControl" Margin="0,204,0,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
     </Grid>
 </Window>

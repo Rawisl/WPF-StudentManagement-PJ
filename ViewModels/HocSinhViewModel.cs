@@ -35,6 +35,7 @@ namespace WPF_StudentManagement_Project.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
         private LopItem? _lopDuocChon;
 
+        // DÙNG LopItem THAY VÌ Services.Lop ĐỂ KHÔNG BỊ LỖI BẢO MẬT (CS0053)
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
         private DateTime _ngaySinh = DateTime.Now;

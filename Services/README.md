@@ -1,16 +1,19 @@
 ﻿## Nguyên tắc của các lệnh tác động lên CSDL
 - Query: Là câu lệnh SQL có các chỗ trống (ký hiệu bằng chữ @). Ví dụ: SELECT * FROM LOP WHERE Khoi = @Khoi.
-- Tham số: Là các giá trị thực tế bỏ vào chỗ trống đó (ví dụ: số 10).
+- Tham số: Là các giá trị thực tế thuộc kiểu `SqlParameter` để gán vào chỗ trống đó.
 
 Kết hợp lại: SELECT * FROM WHERE Khoi = 10
 
-Nguyên tắc: "Cứ thấy dấu @ trong Query, thì phải chuẩn bị một giá trị tương ứng để điền vào."
+Nguyên tắc: "Cứ thấy dấu @ trong Query, thì phải chuẩn bị một đối tượng `SqlParameter` tương ứng để điền vào."
 
 ## Quy trình liên kết cho các control:
-Nhớ **``using WPF_StudentManagement_Project.Services;``** nếu control có dùng DB. 
+Nhớ thêm thư viện khai báo sau nếu control có dùng DB:
+**``using WPF_StudentManagement_Project.Services;``**
+**``using Microsoft.Data.SqlClient;``**
+
 #### Khi làm giao diện (WPF), cần dùng database "Lưu" hoặc "Tìm kiếm", luôn làm đúng 3 bước:
 1. Viết sẵn câu Query mẫu có chứa các @parameter. (SELECT, INSERT, UPDATE, DELETE,...)
-2. Lấy giá trị từ TextBox/ComboBox trên giao diện rồi bỏ vào một cái mảng (object[]). # Tạo thành 1 câu lệnh hoàn chỉnh
+2. Lấy giá trị từ TextBox/ComboBox trên giao diện rồi định nghĩa thành một mảng tham số (`SqlParameter[]`). # Tạo thành 1 câu lệnh hoàn chỉnh
 3. Gọi hàm Execute của DatabaseHelper để máy tự nối lệnh và gửi đi.
 
 ## Ví dụ minh họa cách sử dụng:
@@ -21,11 +24,12 @@ Nhớ **``using WPF_StudentManagement_Project.Services;``** nếu control có d�
 
 ```csharp
 // Câu lệnh SQL: Lấy thông tin học sinh thuộc lớp cụ thể
-// Lưu ý: Có khoảng trắng trước hàm @MaLop
 string sqlGetStudents = "SELECT MaHocSinh, HoTen, GioiTinh, NgaySinh, Email FROM HOCSINH WHERE MaLop = @MaLop";
 
-// Truyền giá trị: Lấy học sinh lớp 10A1 (Mã: '101')
-object[] parameters = { "101" };
+// Truyền giá trị bằng SqlParameter: Lấy học sinh lớp 10A1 (Mã: '101')
+SqlParameter[] parameters = { 
+    new SqlParameter("@MaLop", "101") 
+};
 
 // Gọi hàm
 DataTable dtHocSinh = DatabaseHelper.ExecuteQuery(sqlGetStudents, parameters);
@@ -45,7 +49,10 @@ string sqlGetGrades = @"
     JOIN MONHOC M ON D.MaMonHoc = M.MaMonHoc 
     WHERE D.MaHocSinh = @MaHocSinh AND D.HocKy = @HocKy";
 
-object[] gradeParams = { "HS001", 1 };
+SqlParameter[] gradeParams = { 
+    new SqlParameter("@MaHocSinh", "HS001"), 
+    new SqlParameter("@HocKy", 1) 
+};
 
 DataTable dtDiemSo = DatabaseHelper.ExecuteQuery(sqlGetGrades, gradeParams);
 ```
@@ -53,20 +60,19 @@ DataTable dtDiemSo = DatabaseHelper.ExecuteQuery(sqlGetGrades, gradeParams);
 **Hàm này trả về số nguyên (int) đại diện cho số dòng bị tác động trong CSDL.**
 > Ví dụ 2.1: Thêm một học sinh mới (INSERT)
 ```csharp
-// Chuỗi SQL có khoảng trắng cẩn thận quanh các @tham_số, nếu query có xuống dòng thì bao @ bên ngoài query
 string sqlInsertHS = @"
     INSERT INTO HOCSINH (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email, MaLop) 
-    VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email , @MaLop )";
+    VALUES (@MaHocSinh, @HoTen, @GioiTinh, @NgaySinh, @DiaChi, @Email, @MaLop)";
 
-// Tạo mảng giá trị tương ứng ĐÚNG THỨ TỰ với các @tham_số ở trên
-object[] insertParams = {
-    "HS001", 
-    "Nguyễn Văn A", 
-    "Nam", 
-    new DateTime(2008, 5, 15), // Lưu ý trigger độ tuổi sẽ kiểm tra ngày sinh này
-    "123 Lê Lợi, Quận 1", 
-    "nva@gmail.com", 
-    "101" // Vào lớp 10A1. Trigger TRG_UpdateSiSo sẽ tự động tăng sĩ số.
+// Tạo mảng SqlParameter khai báo rõ tên tham số và giá trị
+SqlParameter[] insertParams = {
+    new SqlParameter("@MaHocSinh", "HS001"),
+    new SqlParameter("@HoTen", "Nguyễn Văn A"),
+    new SqlParameter("@GioiTinh", "Nam"),
+    new SqlParameter("@NgaySinh", new DateTime(2008, 5, 15)), // Lưu ý trigger độ tuổi sẽ kiểm tra ngày sinh này
+    new SqlParameter("@DiaChi", "123 Lê Lợi, Quận 1"),
+    new SqlParameter("@Email", "nva@gmail.com"),
+    new SqlParameter("@MaLop", "101") // Vào lớp 10A1. Trigger TRG_UpdateSiSo sẽ tự động tăng sĩ số.
 };
 
 try
@@ -87,9 +93,13 @@ catch (SqlException ex)
 
 ```csharp
 // Cập nhật điểm 15p và 1 tiết. Trigger TRG_TinhDiemTB sẽ tự tính lại DiemTB.
-string sqlUpdateDiem = "UPDATE DIEMSO SET Diem15p = @Diem15p , Diem1Tiet = @Diem1Tiet WHERE MaDiemSo = @MaDiemSo";
+string sqlUpdateDiem = "UPDATE DIEMSO SET Diem15p = @Diem15p, Diem1Tiet = @Diem1Tiet WHERE MaDiemSo = @MaDiemSo";
 
-object[] updateParams = { 8.5, 9.0, 1 }; // MaDiemSo = 1
+SqlParameter[] updateParams = { 
+    new SqlParameter("@Diem15p", 8.5), 
+    new SqlParameter("@Diem1Tiet", 9.0), 
+    new SqlParameter("@MaDiemSo", 1) 
+};
 
 int updatedRows = DatabaseHelper.ExecuteNonQuery(sqlUpdateDiem, updateParams);
 if (updatedRows > 0)
@@ -104,7 +114,9 @@ if (updatedRows > 0)
 // Lưu ý: Phải xóa dữ liệu bảng DIEMSO của học sinh này trước do có khóa ngoại (FK_DIEMSO_HOCSINH).
 string sqlDeleteHS = "DELETE FROM HOCSINH WHERE MaHocSinh = @MaHocSinh";
 
-object[] deleteParams = { "HS001" };
+SqlParameter[] deleteParams = { 
+    new SqlParameter("@MaHocSinh", "HS001") 
+};
 
 int deletedRows = DatabaseHelper.ExecuteNonQuery(sqlDeleteHS, deleteParams);
 if (deletedRows > 0)
@@ -116,9 +128,8 @@ if (deletedRows > 0)
 > Thay vì viết các hàm CRUD rời rạc ở các file Service bên ngoài, dự án hiện tại áp dụng mô hình thiết kế Active Record. Nghĩa là các thao tác Thêm, Sửa, Xóa, và Lấy danh sách được đóng gói trực tiếp vào bên trong class của thực thể đó (ví dụ: HocSinh, Lop).
 
 Ưu điểm:
-
 - Tư duy hướng đối tượng (OOP) rõ ràng hơn. Các entity tự biết cách quản lý dữ liệu của chính nó dưới Database.
-- Khi gọi các hàm Them(), Sua(), ta không cần truyền tham số (như HocSinh hs) nữa. Hàm sẽ tự động dùng từ khóa this để lấy dữ liệu từ chính đối tượng đang gọi nó. Bên dưới, các hàm này vẫn sử dụng DatabaseHelper.ExecuteNonQuery trả về số nguyên (int) đại diện cho số dòng bị tác động trong CSDL.
+- Khi gọi các hàm Them(), Sua(), ta không cần truyền tham số (như HocSinh hs) nữa. Hàm sẽ tự động dùng từ khóa this để lấy dữ liệu từ chính đối tượng đang gọi nó. Bên dưới, các hàm này vẫn định nghĩa mảng SqlParameter[] và sử dụng DatabaseHelper.ExecuteNonQuery trả về số nguyên (int) đại diện cho số dòng bị tác động trong CSDL.
 
 > Ví dụ cho HocSinh:
 
@@ -227,6 +238,6 @@ if (Lop.Xoa(maLopCanXoa))
 ```
 ## Một số ưu điểm
 
-1. Chống SQL Injection: Nếu cộng trực tiếp chuỗi (string concatenation), kẻ xấu có thể nhập những câu lệnh phá hủy CSDL. Dùng @parameter giúp tách biệt "Lệnh" và "Dữ liệu" an toàn hơn.
+1. Chống SQL Injection: Nếu cộng trực tiếp chuỗi (string concatenation), kẻ xấu có thể nhập những câu lệnh phá hủy CSDL. Sử dụng lớp SqlParameter giúp tách biệt hoàn toàn "Lệnh" và "Dữ liệu", là chuẩn bảo mật an toàn nhất của ADO.NET.
 
 2. Tự động hóa: Hàm DatabaseHelper xử lí tất cả việc "Mở kết nối", "Thực thi" và quan trọng nhất là "Tự đóng kết nối" sau khi xong việc thông qua khối using. Giúp app không bị treo do chiếm dụng CSDL quá lâu.
