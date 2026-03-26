@@ -3,58 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPF_StudentManagement_Project.Views"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:WPF_StudentManagement_Project.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <UserControl.DataContext>
+        <viewmodels:HocSinhViewModel/>
+    </UserControl.DataContext>
 
-        <materialDesign:Card Grid.Row="0" Margin="0,0,0,20" Background="White" UniformCornerRadius="20">
+    <Grid>
+        <materialDesign:Card HorizontalAlignment="Center" Height="380" Margin="0,20,0,0" VerticalAlignment="Top" Width="740" Background="White" UniformCornerRadius="20">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Rectangle Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="2" Fill="#FFDDDDDD" Margin="0,30"/>
+                <Rectangle Grid.Column="1" HorizontalAlignment="Left" Height="360" Stroke="Black" VerticalAlignment="Center" Width="2" Fill="#FFDDDDDD" Grid.ColumnSpan="2"/>
 
                 <StackPanel x:Name="ThongTinSP" Grid.Column="0" Margin="30,20">
-                    <Label x:Name="ThongTinLabel" Content="Thông tin cơ bản" FontSize="25" FontWeight="Bold" Margin="0,0,0,15"/>
+                    <Label Content="Thông tin cơ bản" FontSize="25" FontWeight="Bold" Margin="0,0,0,15"/>
 
-                    <Label x:Name="HoTenLabel" Content="Họ Tên:" FontWeight="SemiBold" FontSize="18"/>
-                    <TextBox x:Name="HoTenTB" Margin="0,5,0,15" Height="30" FontSize="16"/>
+                    <Label Content="Họ Tên:" FontWeight="SemiBold" FontSize="18"/>
+                    <TextBox Text="{Binding HoTen, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,15" Height="30"/>
 
-                    <Label x:Name="GioiTinhLabel" Content="Giới tính:" FontWeight="SemiBold" FontSize="18"/>
+                    <Label Content="Giới tính:" FontWeight="SemiBold" FontSize="18"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,15">
-                        <RadioButton x:Name="NamRB" Content="Nam" IsChecked="True" Margin="0,0,20,0" FontSize="16"/>
-                        <RadioButton x:Name="NuRB" Content="Nữ" FontSize="16"/>
+                        <RadioButton Content="Nam" IsChecked="{Binding IsNam}" Margin="0,0,20,0"/>
+                        <RadioButton Content="Nữ" IsChecked="{Binding IsNu}"/>
                     </StackPanel>
 
-                    <Label x:Name="DateLabel" Content="Ngày sinh:" FontWeight="SemiBold" FontSize="18"/>
-                    <DatePicker x:Name="DateBox" Margin="0,5,0,0" Height="30" FontSize="16"/>
+                    <Label Content="Ngày sinh:" FontWeight="SemiBold" FontSize="18"/>
+                    <DatePicker SelectedDate="{Binding NgaySinh, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" Height="30"/>
+
+                    <TextBlock Text="{Binding TuoiErrorMessage}" Foreground="Red" FontWeight="Bold" Margin="0,5,0,0" TextWrapping="Wrap"/>
                 </StackPanel>
 
                 <StackPanel x:Name="LienLacSP" Grid.Column="2" Margin="30,20">
-                    <Label x:Name="LienLacLabel" Content="Liên lạc" FontSize="25" FontWeight="Bold" Margin="0,0,0,15"/>
+                    <Label Content="Liên lạc" FontSize="25" FontWeight="Bold" Margin="0,0,0,15"/>
 
-                    <Label x:Name="DiaChiLabel" Content="Địa chỉ:" FontWeight="SemiBold" FontSize="18"/>
-                    <TextBox x:Name="DiaChiTB" Margin="0,5,0,15" Height="60" TextWrapping="Wrap" AcceptsReturn="True" FontSize="16"/>
+                    <Label Content="Địa chỉ:" FontWeight="SemiBold" FontSize="18"/>
+                    <TextBox Text="{Binding DiaChi, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,15" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-                    <Label x:Name="EmailLabel" Content="Email:" FontWeight="SemiBold" FontSize="18"/>
-                    <TextBox x:Name="EmailTB" Margin="0,5,0,0" Height="30" FontSize="16"/>
+                    <Label Content="Email:" FontWeight="SemiBold" FontSize="18"/>
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" Height="30"/>
                 </StackPanel>
             </Grid>
         </materialDesign:Card>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="ExitButton" Content="Hủy" Width="80" Margin="0,0,10,0" Background="Gray" BorderBrush="Transparent" Foreground="White" FontWeight="Bold"/>
-            <Button x:Name="SaveButton" Content="Lưu" Width="80" Background="#FF270EDC" Foreground="White" Height="32" FontWeight="Bold"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,410,50,0">
+            <Button Command="{Binding HuyCommand}" Content="Hủy" Width="80" Margin="0,0,10,0" Background="Gray" BorderBrush="Transparent"/>
+
+            <Button Command="{Binding LuuCommand}" Content="Lưu" Width="80" Height="28">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#FF270EDC"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="1" 
+                                    CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="LightGray"/>
+                                <Setter Property="Foreground" Value="DarkGray"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

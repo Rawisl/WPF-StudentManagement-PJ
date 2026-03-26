@@ -1,0 +1,38 @@
+﻿<Window x:Class="WPF_StudentManagement_Project.Views.SuaHocSinhWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chỉnh sửa thông tin học sinh" 
+        SizeToContent="Height" Width="400" 
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize" 
+        Background="White">
+
+    <Border Padding="25">
+        <StackPanel>
+
+            <Label Content="Mã Học Sinh (Không được sửa):" FontWeight="SemiBold" FontSize="14"/>
+            <TextBox Text="{Binding MaHS}" Margin="0,5,0,15" Height="32" IsReadOnly="True" Background="#F5F5F5" Foreground="Gray" VerticalContentAlignment="Center" Padding="5,0"/>
+
+            <Label Content="Họ Tên:" FontWeight="SemiBold" FontSize="14"/>
+            <TextBox x:Name="txtHoTen" Text="{Binding HoTen}" Margin="0,5,0,15" Height="32" VerticalContentAlignment="Center" Padding="5,0"/>
+
+            <Label Content="Giới tính:" FontWeight="SemiBold" FontSize="14"/>
+            <ComboBox x:Name="cbGioiTinh" Text="{Binding GioiTinh}" Margin="0,5,0,15" Height="32" VerticalContentAlignment="Center" Padding="5,0">
+                <ComboBoxItem Content="Nam"/>
+                <ComboBoxItem Content="Nữ"/>
+            </ComboBox>
+
+            <Label Content="Ngày sinh (dd/MM/yyyy):" FontWeight="SemiBold" FontSize="14"/>
+            <TextBox x:Name="txtNgaySinh" Text="{Binding NgaySinh}" Margin="0,5,0,25" Height="32" VerticalContentAlignment="Center" Padding="5,0"/>
+
+            <Button Content="Lưu Thay Đổi" Click="BtnLuu_Click" Height="40" Background="#FF270EDC" Foreground="White" FontSize="16" Cursor="Hand">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+        </StackPanel>
+    </Border>
+</Window>
