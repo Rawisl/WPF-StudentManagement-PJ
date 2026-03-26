@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -44,14 +45,13 @@ namespace WPF_StudentManagement_Project.Services
             string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email) " +
                            "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email)";
 
-            object[] parameters = {
-                this.MaHocSinh,
-                this.HoTen ?? (object)DBNull.Value,
-                this.GioiTinh ?? (object)DBNull.Value,
-                this.NgaySinh,
-                this.DiaChi ?? (object)DBNull.Value,
-                this.Email ?? (object)DBNull.Value,
-                // this.MaLop
+            SqlParameter[] parameters = new SqlParameter[] {
+                new SqlParameter("@MaHocSinh", this.MaHocSinh),
+                new SqlParameter("@HoTen", this.HoTen ?? (object)DBNull.Value),
+                new SqlParameter("@GioiTinh", this.GioiTinh ?? (object)DBNull.Value),
+                new SqlParameter("@NgaySinh", this.NgaySinh),
+                new SqlParameter("@DiaChi", this.DiaChi ?? (object)DBNull.Value),
+                new SqlParameter("@Email", this.Email ?? (object)DBNull.Value)
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
@@ -63,14 +63,13 @@ namespace WPF_StudentManagement_Project.Services
                            "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email " +
                            "WHERE MaHocSinh = @MaHocSinh";
 
-            object[] parameters = {
-                this.HoTen ?? (object)DBNull.Value,
-                this.GioiTinh ?? (object)DBNull.Value,
-                this.NgaySinh,
-                this.DiaChi ?? (object)DBNull.Value,
-                this.Email ?? (object)DBNull.Value,
-                // this.MaLop,
-                this.MaHocSinh
+            SqlParameter[] parameters = new SqlParameter[] {
+                new SqlParameter("@MaHocSinh", this.MaHocSinh),
+                new SqlParameter("@HoTen", this.HoTen ?? (object)DBNull.Value),
+                new SqlParameter("@GioiTinh", this.GioiTinh ?? (object)DBNull.Value),
+                new SqlParameter("@NgaySinh", this.NgaySinh),
+                new SqlParameter("@DiaChi", this.DiaChi ?? (object)DBNull.Value),
+                new SqlParameter("@Email", this.Email ?? (object)DBNull.Value)
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
@@ -79,7 +78,9 @@ namespace WPF_StudentManagement_Project.Services
         // DELETE:
         public static bool Xoa(string maHocSinh) {
             string query = "DELETE FROM HocSinh WHERE MaHocSinh = @MaHocSinh";
-            object[] parameters = { maHocSinh };
+            SqlParameter[] parameters = new SqlParameter[] {
+                new SqlParameter("@MaHocSinh", maHocSinh)
+            };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }

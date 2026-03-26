@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -28,7 +29,11 @@ namespace WPF_StudentManagement_Project.Services
 
             // Tìm MaPhanLop dựa trên học sinh, học kỳ và năm học
             string findPlQuery = "SELECT MaPhanLop FROM PHANLOP WHERE MaHocSinh = @MaHocSinh AND HocKy = @HocKy AND NamHoc = @NamHoc";
-            object[] plParams = { maHocSinh, hocKy, namHoc };
+            SqlParameter[] plParams = {
+                new SqlParameter("@MaHocSinh", maHocSinh),
+                new SqlParameter("@HocKy", hocKy),
+                new SqlParameter("@NamHoc", namHoc)
+            };
             DataTable dtPhanLop = DatabaseHelper.ExecuteQuery(findPlQuery, plParams);
 
             if (dtPhanLop.Rows.Count == 0)
@@ -39,21 +44,34 @@ namespace WPF_StudentManagement_Project.Services
 
             // Kiểm tra xem đã có điểm cho môn này trong phân lớp này chưa
             string checkDiemQuery = "SELECT MaDiemSo FROM DIEMSO WHERE MaPhanLop = @MaPhanLop AND MaMonHoc = @MaMonHoc";
-            object[] checkParams = { maPhanLop, maMonHoc };
+            SqlParameter[] checkParams = {
+                new SqlParameter("@MaPhanLop", maPhanLop),
+                new SqlParameter("@MaMonHoc", maMonHoc)
+            };
             DataTable dtDiem = DatabaseHelper.ExecuteQuery(checkDiemQuery, checkParams);
 
             if (dtDiem.Rows.Count > 0)
             {
                 // Đã có -> Cập nhật (UPDATE)
                 string updateQuery = "UPDATE DIEMSO SET Diem15p = @Diem15p , Diem1Tiet = @Diem1Tiet WHERE MaPhanLop = @MaPhanLop AND MaMonHoc = @MaMonHoc";
-                object[] updateParams = { diem15p, diem1Tiet, maPhanLop, maMonHoc };
+                SqlParameter[] updateParams = {
+                    new SqlParameter("@Diem15p", diem15p),
+                    new SqlParameter("@Diem1Tiet", diem1Tiet),
+                    new SqlParameter("@MaPhanLop", maPhanLop),
+                    new SqlParameter("@MaMonHoc", maMonHoc)
+                };
                 return DatabaseHelper.ExecuteNonQuery(updateQuery, updateParams) > 0;
             }
             else
             {
                 // Chưa có -> Thêm mới (INSERT)
                 string insertQuery = "INSERT INTO DIEMSO (MaPhanLop, MaMonHoc, Diem15p, Diem1Tiet) VALUES ( @MaPhanLop , @MaMonHoc , @Diem15p , @Diem1Tiet )";
-                object[] insertParams = { maPhanLop, maMonHoc, diem15p, diem1Tiet };
+                SqlParameter[] insertParams = {
+                    new SqlParameter("@MaPhanLop", maPhanLop),
+                    new SqlParameter("@MaMonHoc", maMonHoc),
+                    new SqlParameter("@Diem15p", diem15p),
+                    new SqlParameter("@Diem1Tiet", diem1Tiet)
+                };
                 return DatabaseHelper.ExecuteNonQuery(insertQuery, insertParams) > 0;
             }
         }

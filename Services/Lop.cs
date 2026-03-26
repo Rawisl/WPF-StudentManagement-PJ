@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -39,11 +40,11 @@ namespace WPF_StudentManagement_Project.Services
             string query = "INSERT INTO Lop (MaLop, TenLop, Khoi, SiSo) " +
                            "VALUES ( @MaLop , @TenLop , @Khoi , @SiSo )";
 
-            object[] parameters = {
-                this.MaLop,
-                this.TenLop ?? (object)DBNull.Value,
-                this.Khoi,
-                this.SiSo
+            SqlParameter[] parameters = {
+                new SqlParameter("@MaLop", this.MaLop),
+                new SqlParameter("@TenLop", this.TenLop ?? (object)DBNull.Value),
+                new SqlParameter("@Khoi", this.Khoi),
+                new SqlParameter("@SiSo", this.SiSo)
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
@@ -54,11 +55,11 @@ namespace WPF_StudentManagement_Project.Services
             string query = "UPDATE Lop SET TenLop = @TenLop , Khoi = @Khoi , SiSo = @SiSo " +
                            "WHERE MaLop = @MaLop";
 
-            object[] parameters = {
-                this.TenLop ?? (object)DBNull.Value,
-                this.Khoi,
-                this.SiSo,
-                this.MaLop
+            SqlParameter[] parameters = {
+                new SqlParameter("@TenLop", this.TenLop ?? (object)DBNull.Value),
+                new SqlParameter("@Khoi", this.Khoi),
+                new SqlParameter("@SiSo", this.SiSo),
+                new SqlParameter("@MaLop", this.MaLop)
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
@@ -67,7 +68,9 @@ namespace WPF_StudentManagement_Project.Services
         // DELETE
         public static bool Xoa(string maLop) {
             string query = "DELETE FROM Lop WHERE MaLop = @MaLop";
-            object[] parameters = { maLop };
+            SqlParameter[] parameters = {
+                new SqlParameter("@MaLop", maLop)
+            };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
