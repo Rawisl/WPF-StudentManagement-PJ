@@ -14,10 +14,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,0,0,20">
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Thay đổi quy định" VerticalAlignment="Center" FontSize="36" FontWeight="Bold"/>
-            <Button x:Name="SaveBtn" Content="Lưu thay đổi" HorizontalAlignment="Right" Height="60" 
-                    VerticalAlignment="Center" Width="174" FontSize="22" 
+        <Grid HorizontalAlignment="Center" Grid.Row="0" Margin="0,0,0,0" VerticalAlignment="Top" Width="800">
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Thay đổi quy định" VerticalAlignment="Center" FontSize="36" TextAlignment="Center" FontWeight="Bold"/>
+            <Button x:Name="SaveBtn" Content="Lưu thay đổi" Click="SaveBtn_Click" HorizontalAlignment="Right" Height="78" 
+                    VerticalAlignment="Center" Width="174" FontSize="27" 
                     Foreground="White" Background="#FF0006FF">
                 <Button.Resources>
                     <Style TargetType="Border">
@@ -48,7 +48,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="40"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="txtTuoiMin" Text="18" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                        <TextBox x:Name="txtTuoiMin" Text="18" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" PreviewTextInput="NumberValidationTextBox" Grid.Column="0"/>
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
                                             <Button Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangTuoiMin_Click"/>
                                             <Button Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamTuoiMin_Click"/>
@@ -65,7 +65,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="40"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="txtTuoiMax" Text="30" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                        <TextBox x:Name="txtTuoiMax" Text="30" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" PreviewTextInput="NumberValidationTextBox" Grid.Column="0"/>
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
                                             <Button Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangTuoiMax_Click"/>
                                             <Button Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamTuoiMax_Click"/>
@@ -89,7 +89,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="txtSiSoMax" Text="36" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                <TextBox x:Name="txtSiSoMax" Text="36" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" PreviewTextInput="NumberValidationTextBox" Grid.Column="0"/>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
                                     <Button x:Name="TangSiSoBtn" Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangSiSo_Click"/>
                                     <Button x:Name="GiamSiSoBtn" Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamSiSo_Click"/>
@@ -141,7 +141,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="txtPassScore" Text="5.0" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" IsReadOnly="True" Grid.Column="0"/>
+                                <TextBox x:Name="txtPassScore" Text="5.0" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="15,0" FontSize="16" PreviewTextInput="DecimalValidationTextBox" Grid.Column="0"/>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0">
                                     <Button x:Name="TangDiemBtn" Content="▲" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnTangDiem_Click"/>
                                     <Button x:Name="GiamDiemBtn" Content="▼" Height="18" Padding="0" Background="Transparent" BorderThickness="0" Foreground="Gray" Click="btnGiamDiem_Click"/>
