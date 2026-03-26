@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPF_StudentManagement_Project.ViewModels
 {
-    internal class BaseViewModel
+    internal class CaiDatViewModel
     {
     }
 }
