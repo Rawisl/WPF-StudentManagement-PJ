@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -33,14 +34,18 @@ namespace WPF_StudentManagement_Project.Views
         public CaiDatUC()
         {
             InitializeComponent();
+
+            // GÁN DÒNG NÀY VÀO ĐỂ SET NÃO CHO VIEW
+            this.DataContext = new WPF_StudentManagement_Project.ViewModels.ThayDoiQDViewModel();
+
             dgLopHoc.ItemsSource = DanhSachLop;
             dgMonHoc.ItemsSource = DanhSachMon;
 
             // Gọi ThamSo.LayDanhSach() để lấy dữ liệu từ DB đổ lên TextBox khi vừa mở form
-            txtTuoiMin.Text = QuyDinhService.minTuoi.ToString();
-            txtTuoiMax.Text = QuyDinhService.maxTuoi.ToString();
-            txtSiSoMax.Text = QuyDinhService.maxSiSo.ToString();
-            txtPassScore.Text = QuyDinhService.DiemDat.ToString("0.0");
+            txtTuoiMin.Text = QuyDinhService.minAge.ToString();
+            txtTuoiMax.Text = QuyDinhService.maxAge.ToString();
+            txtSiSoMax.Text = QuyDinhService.maxClassSize.ToString();
+            txtPassScore.Text = QuyDinhService.passingGrade.ToString("0.0");
 
             // Nạp danh sách lớp từ DB
             DataTable dtLop = DatabaseHelper.ExecuteQuery("SELECT TenLop, Khoi FROM LOP");
@@ -158,82 +163,6 @@ namespace WPF_StudentManagement_Project.Views
                 {
                     e.Handled = true;
                 }
-            }
-        }
-
-        // LƯU DỮ LIỆU XUỐNG RAM & DATABASE ---
-        private void SaveBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // Bước 4.1: Parse và Validate dữ liệu gõ tay (Đề phòng user gõ "999")
-            if (!int.TryParse(txtTuoiMin.Text, out int minTuoi) ||
-                !int.TryParse(txtTuoiMax.Text, out int maxTuoi) ||
-                !int.TryParse(txtSiSoMax.Text, out int siSo) ||
-                !double.TryParse(txtPassScore.Text, out double diemDat))
-            {
-                MessageBox.Show("Vui lòng nhập số hợp lệ vào các ô quy định!", "Lỗi định dạng", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // Kiểm tra Logic theo tiêu chí của bạn
-            if (minTuoi < 0 || maxTuoi > 100 || minTuoi > maxTuoi)
-            {
-                MessageBox.Show("Quy định Tuổi không hợp lệ!\n(Từ 0 đến 100, Tuổi Min phải <= Tuổi Max)", "Lỗi logic", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (siSo < 0)
-            {
-                MessageBox.Show("Sĩ số tối đa không được nhỏ hơn 0!", "Lỗi logic", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (diemDat < 0.0 || diemDat > 10.0)
-            {
-                MessageBox.Show("Điểm đạt phải nằm trong khoảng từ 0.0 đến 10.0!", "Lỗi logic", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            // Lưu vào biến RAM của QuyDinhService
-            QuyDinhService.minTuoi = minTuoi;
-            QuyDinhService.maxTuoi = maxTuoi;
-            QuyDinhService.maxSiSo = siSo;
-            QuyDinhService.DiemDat = diemDat;
-
-            //Lưu xuống Database qua DatabaseHelper
-            try
-            {
-                // Cần thay thế các mã 'TS01', 'TS02'... bên dưới 
-                // cho khớp với cột MaThamSo hoặc TenThamSo thực tế trong CSDL
-
-                string query = "UPDATE THAMSO SET GiaTri = @GiaTri WHERE MaThamSo = @MaThamSo";
-
-                // Cập nhật Tuổi tối thiểu
-                DatabaseHelper.ExecuteNonQuery(query, new SqlParameter[] {
-                    new SqlParameter("@GiaTri", minTuoi),
-                    new SqlParameter("@MaThamSo", "MinAge")
-                });
-
-                // Cập nhật Tuổi tối đa
-                DatabaseHelper.ExecuteNonQuery(query, new SqlParameter[] {
-                    new SqlParameter("@GiaTri", maxTuoi),
-                    new SqlParameter("@MaThamSo", "MaxAge")
-                });
-
-                // Cập nhật Sĩ số
-                DatabaseHelper.ExecuteNonQuery(query, new SqlParameter[] {
-                    new SqlParameter("@GiaTri", siSo),
-                    new SqlParameter("@MaThamSo", "MaxClassSize")
-                });
-
-                // Cập nhật Điểm đạt
-                DatabaseHelper.ExecuteNonQuery(query, new SqlParameter[] {
-                    new SqlParameter("@GiaTri", diemDat),
-                    new SqlParameter("@MaThamSo", "PassingGrade")
-                });
-
-                MessageBox.Show("Cập nhật quy định hệ thống thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi cập nhật CSDL:\n{ex.Message}", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
