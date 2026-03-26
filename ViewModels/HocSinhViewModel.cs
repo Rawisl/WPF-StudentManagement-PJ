@@ -72,23 +72,25 @@ namespace WPF_StudentManagement_Project.ViewModels
         // Logic kiểm tra tuổi mỗi khi thay đổi ngày sinh
         partial void OnNgaySinhChanged(DateTime value)
         {
+            // Tính tuổi chính xác
             int age = DateTime.Now.Year - value.Year;
             if (DateTime.Now.DayOfYear < value.DayOfYear) age--;
 
-            if (age < Services.QuyDinhService.minTuoi || age > Services.QuyDinhService.maxTuoi)
+            // Kiểm tra quy định
+            if (age < QuyDinhService.minTuoi || age > QuyDinhService.maxTuoi)
             {
-                TuoiErrorMessage = $"Lỗi: Tuổi học sinh ({age} tuổi) không hợp lệ.\nQuy định từ {Services.QuyDinhService.minTuoi} - {Services.QuyDinhService.maxTuoi} tuổi.";
+                TuoiErrorMessage = $"Lỗi: Tuổi học sinh ({age} tuổi) không hợp lệ.\nQuy định từ {QuyDinhService.minTuoi} - {QuyDinhService.maxTuoi} tuổi.";
             }
             else
             {
-                TuoiErrorMessage = string.Empty;
+                TuoiErrorMessage = string.Empty; // Xóa lỗi nếu hợp lệ
             }
         }
 
         // Kiểm tra điều kiện để kích hoạt nút Lưu
         private bool CanLuu()
         {
-            return string.IsNullOrEmpty(TuoiErrorMessage) && LopDuocChon != null;
+            return string.IsNullOrEmpty(TuoiErrorMessage);
         }
 
         [RelayCommand(CanExecute = nameof(CanLuu))]
@@ -138,7 +140,6 @@ namespace WPF_StudentManagement_Project.ViewModels
             Email = string.Empty;
             NgaySinh = DateTime.Now;
             IsNam = true;
-            if (DanhSachLop.Count > 0) LopDuocChon = DanhSachLop[0];
         }
     }
 }

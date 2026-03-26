@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -16,9 +15,9 @@ namespace WPF_StudentManagement_Project.Services
         public DateTime NgaySinh { get; set; }
         public string? DiaChi { get; set; }
         public string? Email { get; set; }
-        // public required string MaLop { get; set; } DB structure changed
+        public required string MaLop { get; set; }
 
-        // READ:
+        // 1. READ:
         public static List<HocSinh> LayDanhSach() {
             List<HocSinh> danhSach = new List<HocSinh>();
             string query = "SELECT * FROM HocSinh";
@@ -28,7 +27,7 @@ namespace WPF_StudentManagement_Project.Services
             foreach (DataRow row in data.Rows) {
                 HocSinh hs = new HocSinh() {
                     MaHocSinh = row["MaHocSinh"] as string ?? "",
-                    // MaLop = row["MaLop"] as string ?? "",
+                    MaLop = row["MaLop"] as string ?? "",
                     HoTen = row["HoTen"] as string ?? "",
                     GioiTinh = row["GioiTinh"] as string ?? "",
                     DiaChi = row["DiaChi"] as string,
@@ -40,47 +39,47 @@ namespace WPF_StudentManagement_Project.Services
             return danhSach;
         }
 
-        // CREATE:
+        // 2. CREATE:
         public bool Them() {
-            string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email) " +
-                           "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email)";
+            string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email, MaLop) " +
+                           "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email , @MaLop )";
 
-            SqlParameter[] parameters = new SqlParameter[] {
-                new SqlParameter("@MaHocSinh", this.MaHocSinh),
-                new SqlParameter("@HoTen", this.HoTen ?? (object)DBNull.Value),
-                new SqlParameter("@GioiTinh", this.GioiTinh ?? (object)DBNull.Value),
-                new SqlParameter("@NgaySinh", this.NgaySinh),
-                new SqlParameter("@DiaChi", this.DiaChi ?? (object)DBNull.Value),
-                new SqlParameter("@Email", this.Email ?? (object)DBNull.Value)
+            object[] parameters = {
+                this.MaHocSinh,
+                this.HoTen ?? (object)DBNull.Value,
+                this.GioiTinh ?? (object)DBNull.Value,
+                this.NgaySinh,
+                this.DiaChi ?? (object)DBNull.Value,
+                this.Email ?? (object)DBNull.Value,
+                this.MaLop
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // UPDATE:
+        // 3. UPDATE:
         public bool Sua() {
             string query = "UPDATE HocSinh SET HoTen = @HoTen , GioiTinh = @GioiTinh , " +
-                           "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email " +
+                           "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email , MaLop = @MaLop " +
                            "WHERE MaHocSinh = @MaHocSinh";
 
-            SqlParameter[] parameters = new SqlParameter[] {
-                new SqlParameter("@MaHocSinh", this.MaHocSinh),
-                new SqlParameter("@HoTen", this.HoTen ?? (object)DBNull.Value),
-                new SqlParameter("@GioiTinh", this.GioiTinh ?? (object)DBNull.Value),
-                new SqlParameter("@NgaySinh", this.NgaySinh),
-                new SqlParameter("@DiaChi", this.DiaChi ?? (object)DBNull.Value),
-                new SqlParameter("@Email", this.Email ?? (object)DBNull.Value)
+            object[] parameters = {
+                this.HoTen ?? (object)DBNull.Value,
+                this.GioiTinh ?? (object)DBNull.Value,
+                this.NgaySinh,
+                this.DiaChi ?? (object)DBNull.Value,
+                this.Email ?? (object)DBNull.Value,
+                this.MaLop,
+                this.MaHocSinh
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // DELETE:
+        // 4. DELETE:
         public static bool Xoa(string maHocSinh) {
             string query = "DELETE FROM HocSinh WHERE MaHocSinh = @MaHocSinh";
-            SqlParameter[] parameters = new SqlParameter[] {
-                new SqlParameter("@MaHocSinh", maHocSinh)
-            };
+            object[] parameters = { maHocSinh };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }

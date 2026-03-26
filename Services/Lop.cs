@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace WPF_StudentManagement_Project.Services
         public int Khoi { get; set; }
         public int SiSo { get; set; }
 
-        // READ
+        // 1. READ
         public static List<Lop> LayDanhSach() {
             List<Lop> danhSach = new List<Lop>();
             string query = "SELECT * FROM Lop";
@@ -35,42 +34,40 @@ namespace WPF_StudentManagement_Project.Services
             return danhSach;
         }
 
-        // CREATE
+        // 2. CREATE
         public bool Them() {
             string query = "INSERT INTO Lop (MaLop, TenLop, Khoi, SiSo) " +
                            "VALUES ( @MaLop , @TenLop , @Khoi , @SiSo )";
 
-            SqlParameter[] parameters = {
-                new SqlParameter("@MaLop", this.MaLop),
-                new SqlParameter("@TenLop", this.TenLop ?? (object)DBNull.Value),
-                new SqlParameter("@Khoi", this.Khoi),
-                new SqlParameter("@SiSo", this.SiSo)
+            object[] parameters = {
+                this.MaLop,
+                this.TenLop ?? (object)DBNull.Value,
+                this.Khoi,
+                this.SiSo
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // UPDATE
+        // 3. UPDATE
         public bool Sua() {
             string query = "UPDATE Lop SET TenLop = @TenLop , Khoi = @Khoi , SiSo = @SiSo " +
                            "WHERE MaLop = @MaLop";
 
-            SqlParameter[] parameters = {
-                new SqlParameter("@TenLop", this.TenLop ?? (object)DBNull.Value),
-                new SqlParameter("@Khoi", this.Khoi),
-                new SqlParameter("@SiSo", this.SiSo),
-                new SqlParameter("@MaLop", this.MaLop)
+            object[] parameters = {
+                this.TenLop ?? (object)DBNull.Value,
+                this.Khoi,
+                this.SiSo,
+                this.MaLop
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        // DELETE
+        // 4. DELETE
         public static bool Xoa(string maLop) {
             string query = "DELETE FROM Lop WHERE MaLop = @MaLop";
-            SqlParameter[] parameters = {
-                new SqlParameter("@MaLop", maLop)
-            };
+            object[] parameters = { maLop };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
         }
