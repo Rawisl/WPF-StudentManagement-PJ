@@ -20,46 +20,7 @@ namespace WPF_StudentManagement_Project
         public MainWindow()
         {
             InitializeComponent();
-            MainContent.Content = new TrangChuUC();
-        }
-
-        private void Btn_TrangChu_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new TrangChuUC();
-        }
-
-        private void Btn_TiepNhanHS_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new TiepNhanUC();
-        }
-
-        private void Btn_LapDSL_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new LapDanhSachUC();
-
-        }
-
-        private void Btn_NhapDiemMon_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new NhapDiemUC();
-
-        }
-
-        private void Btn_BaoCao_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new BaoCaoUC();
-
-        }
-
-        private void Btn_ThayDoiQD_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new ThayDoiQDUC();
-        }
-
-        private void Btn_CaiDat_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new CaiDatUC();
-
+            this.DataContext = new WPF_StudentManagement_Project.ViewModels.MainViewModel();
         }
     }
 }
