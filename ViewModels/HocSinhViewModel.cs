@@ -1,18 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Windows;
+using WPF_StudentManagement_Project.Services;
 
 namespace WPF_StudentManagement_Project.ViewModels
 {
-    // TẠO CLASS TRUNG GIAN (Giống hệt cách bạn làm với HocSinhItem)
+    // Lớp trung gian để hiển thị danh sách lớp lên giao diện
     public class LopItem
     {
         public string MaLop { get; set; } = string.Empty;
         public string TenLop { get; set; } = string.Empty;
     }
 
+    // ViewModel chính cho màn hình Tiếp nhận học sinh
     public partial class HocSinhViewModel : ObservableObject
     {
         [ObservableProperty] private string _hoTen = string.Empty;
@@ -21,11 +24,10 @@ namespace WPF_StudentManagement_Project.ViewModels
         [ObservableProperty] private string _diaChi = string.Empty;
         [ObservableProperty] private string _email = string.Empty;
 
-        // Báo lỗi màu đỏ
-        [ObservableProperty]
-        private string _tuoiErrorMessage = string.Empty;
+        // Thông báo lỗi nếu sai tuổi quy định
+        [ObservableProperty] private string _tuoiErrorMessage = string.Empty;
 
-        // DÙNG LopItem THAY VÌ Services.Lop ĐỂ KHÔNG BỊ LỖI BẢO MẬT (CS0053)
+        // Danh sách lớp nạp từ Database
         [ObservableProperty]
         private ObservableCollection<LopItem> _danhSachLop = new ObservableCollection<LopItem>();
 
@@ -33,25 +35,28 @@ namespace WPF_StudentManagement_Project.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
         private LopItem? _lopDuocChon;
 
-        // Khởi tạo ViewModel: Tự động lôi danh sách lớp từ DB lên
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
+        private DateTime _ngaySinh = DateTime.Now;
+
+        // Constructor: Tự động tải danh sách lớp khi khởi tạo màn hình
         public HocSinhViewModel()
         {
             try
             {
-                // Gọi hàm lấy danh sách của Long
+                // Gọi hàm lấy danh sách từ Services của Long
                 var list = Services.Lop.LayDanhSach();
 
-                // Đổ dữ liệu từ class của Long sang class trung gian của Giao diện
                 foreach (var lop in list)
                 {
                     DanhSachLop.Add(new LopItem
                     {
                         MaLop = lop.MaLop,
-                        TenLop = lop.TenLop ?? lop.MaLop // Nếu không có tên thì lấy mã làm tên
+                        TenLop = lop.TenLop ?? lop.MaLop
                     });
                 }
 
-                // Chọn sẵn lớp đầu tiên cho tiện
+                // Tự động chọn lớp đầu tiên
                 if (DanhSachLop.Count > 0)
                 {
                     LopDuocChon = DanhSachLop[0];
@@ -63,10 +68,7 @@ namespace WPF_StudentManagement_Project.ViewModels
             }
         }
 
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
-        private DateTime _ngaySinh = DateTime.Now;
-
+        // Logic kiểm tra tuổi mỗi khi thay đổi ngày sinh
         partial void OnNgaySinhChanged(DateTime value)
         {
             int age = DateTime.Now.Year - value.Year;
@@ -82,23 +84,19 @@ namespace WPF_StudentManagement_Project.ViewModels
             }
         }
 
-        // Điều kiện để nút Lưu sáng lên: Không có lỗi tuổi VÀ phải chọn Lớp
+        // Kiểm tra điều kiện để kích hoạt nút Lưu
         private bool CanLuu()
         {
             return string.IsNullOrEmpty(TuoiErrorMessage) && LopDuocChon != null;
         }
-
 
         [RelayCommand(CanExecute = nameof(CanLuu))]
         private void Luu()
         {
             string gioiTinh = IsNam ? "Nam" : "Nữ";
 
-            // Tự động sinh Mã Học Sinh
+            // Tự động sinh mã HS 10 ký tự (ddHHmmss + HS) để tránh lỗi truncated
             string maHSMoi = "HS" + DateTime.Now.ToString("ddHHmmss");
-
-            // Lấy mã lớp thực tế mà người dùng chọn
-            string maLopThucTe = LopDuocChon!.MaLop;
 
             Services.HocSinh hsMoi = new Services.HocSinh()
             {
@@ -108,16 +106,15 @@ namespace WPF_StudentManagement_Project.ViewModels
                 NgaySinh = this.NgaySinh,
                 DiaChi = this.DiaChi,
                 Email = this.Email,
-                MaLop = maLopThucTe
+                MaLop = LopDuocChon!.MaLop
             };
 
             try
             {
-                if (hsMoi.Them()) // Gọi hàm Them() của Long
+                if (hsMoi.Them())
                 {
                     MessageBox.Show($"Tiếp nhận học sinh thành công!\nMã HS: {maHSMoi}\nHọ Tên: {HoTen}\nVào lớp: {LopDuocChon.TenLop}",
                                     "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-
                     Huy();
                 }
                 else
