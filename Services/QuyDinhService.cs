@@ -35,15 +35,15 @@ namespace WPF_StudentManagement_Project.Services
 
                 switch (maThamSo)
                 {
-                    case "minTuoi":
+                    case "MinAge":
                         minTuoi = (int)giaTri;
                         break;
 
-                    case "maxTuoi":
+                    case "MaxAge":
                         maxTuoi = (int)giaTri;
                         break;
 
-                    case "maxSiSo":
+                    case "MaxClassSize":
                         maxSiSo = (int)giaTri;
                         break;
 
@@ -55,7 +55,7 @@ namespace WPF_StudentManagement_Project.Services
                         maxMonHoc = (int)giaTri;
                         break;
 
-                    case "DiemDat":
+                    case "PassingGrade":
                         DiemDat = giaTri;
                         break;
                 }

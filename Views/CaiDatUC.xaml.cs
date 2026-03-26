@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Text.RegularExpressions;
 using WPF_StudentManagement_Project.Services;
-using Microsoft.Data.SqlClient;
 
 namespace WPF_StudentManagement_Project.Views
 {
@@ -36,6 +37,25 @@ namespace WPF_StudentManagement_Project.Views
             dgMonHoc.ItemsSource = DanhSachMon;
 
             // Gọi ThamSo.LayDanhSach() để lấy dữ liệu từ DB đổ lên TextBox khi vừa mở form
+            txtTuoiMin.Text = QuyDinhService.minTuoi.ToString();
+            txtTuoiMax.Text = QuyDinhService.maxTuoi.ToString();
+            txtSiSoMax.Text = QuyDinhService.maxSiSo.ToString();
+            txtPassScore.Text = QuyDinhService.DiemDat.ToString("0.0");
+
+            // Nạp danh sách lớp từ DB
+            DataTable dtLop = DatabaseHelper.ExecuteQuery("SELECT TenLop, Khoi FROM LOP");
+            int sttLop = 1;
+            foreach (DataRow row in dtLop.Rows)
+            {
+                DanhSachLop.Add(new LopHocModel
+                {
+                    STT = sttLop++,
+                    TenLop = row["TenLop"].ToString(),
+                    Khoi = row["Khoi"].ToString()
+                });
+            }
+
+            // Làm tương tự với môn học...
         }
 
         // LOGIC RÀNG BUỘC CÁC NÚT TĂNG/GIẢM ---

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using WPF_StudentManagement_Project.Services;
+using Microsoft.Data.SqlClient;
 
 namespace WPF_StudentManagement_Project
 {
@@ -10,7 +11,7 @@ namespace WPF_StudentManagement_Project
     /// </summary>
     public partial class App : Application
     {
-        /*protected override void OnStartup(StartupEventArgs e)
+       protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
@@ -24,7 +25,7 @@ namespace WPF_StudentManagement_Project
                 MessageBox.Show("Lỗi khi tải tham số quy định từ CSDL: " + ex.Message,
                                 "Lỗi Hệ Thống", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }*/
+        }
     }
 
 }
