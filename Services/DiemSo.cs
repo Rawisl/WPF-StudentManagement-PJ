@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WPF_StudentManagement_Project.Services
 {
-    internal class DiemSo
+    public class DiemSo
     {
         public required int MaDiemSo { get; set; }
         // public required string MaHocSinh { get; set; }

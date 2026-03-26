@@ -16,7 +16,7 @@ namespace WPF_StudentManagement_Project.Services
         public static int maxSiSo = 40;
         public static int maxSoLop = 9;
         public static int maxMonHoc = 9;
-        public static double DiemDat = 5.0; 
+        public static double DiemDat = 5.0;
         // Nhớ auto-start, review app.xaml.cs  
         /// <summary>
         /// Tải các quy định/tham số từ Database lên dùng toàn cục.

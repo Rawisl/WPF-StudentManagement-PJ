@@ -17,26 +17,11 @@
         <materialDesign:Card HorizontalAlignment="Left" Height="89" Margin="10,10,0,0" VerticalAlignment="Top" Width="774" BorderBrush="Black" BorderThickness="1" UniformCornerRadius="15">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+                <Label Content="Khối:" FontSize="20" Foreground="Black" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ChonKhoiCB" Width="100" Height="32" Margin="5,0,20,0" VerticalAlignment="Center"/>
 
-        <materialDesign:Card Grid.Row="0" Margin="0,0,0,15" Padding="15" 
-                             BorderBrush="Black" BorderThickness="1" UniformCornerRadius="15">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="{Binding SiSoText}" Foreground="Black" FontSize="20" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                <Label Content="Lớp:" FontSize="20" Foreground="Black" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ChonLopCB" Width="120" Height="32" Margin="5,0,20,0" VerticalAlignment="Center"/>
 
                 <TextBlock Text="{Binding SiSoText}" Foreground="Black" FontSize="20" VerticalAlignment="Center" Margin="0,0,30,0"/>
 
@@ -66,7 +51,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-            </Grid>
+            </StackPanel>
         </materialDesign:Card>
 
         <DataGrid HorizontalAlignment="Center" Height="300" Margin="0,115,0,0" VerticalAlignment="Top" Width="774" 

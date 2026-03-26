@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WPF_StudentManagement_Project.Services
 {
-    internal class HocSinh
+    public class HocSinh
     {
         public required string MaHocSinh { get; set; }
         public required string HoTen { get; set; }
@@ -19,14 +19,17 @@ namespace WPF_StudentManagement_Project.Services
         // public required string MaLop { get; set; } DB structure changed
 
         // READ:
-        public static List<HocSinh> LayDanhSach() {
+        public static List<HocSinh> LayDanhSach()
+        {
             List<HocSinh> danhSach = new List<HocSinh>();
             string query = "SELECT * FROM HocSinh";
 
             DataTable data = DatabaseHelper.ExecuteQuery(query);
 
-            foreach (DataRow row in data.Rows) {
-                HocSinh hs = new HocSinh() {
+            foreach (DataRow row in data.Rows)
+            {
+                HocSinh hs = new HocSinh()
+                {
                     MaHocSinh = row["MaHocSinh"] as string ?? "",
                     // MaLop = row["MaLop"] as string ?? "",
                     HoTen = row["HoTen"] as string ?? "",
@@ -41,7 +44,8 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // CREATE:
-        public bool Them() {
+        public bool Them()
+        {
             string query = "INSERT INTO HocSinh (MaHocSinh, HoTen, GioiTinh, NgaySinh, DiaChi, Email) " +
                            "VALUES ( @MaHocSinh , @HoTen , @GioiTinh , @NgaySinh , @DiaChi , @Email)";
 
@@ -58,7 +62,8 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // UPDATE:
-        public bool Sua() {
+        public bool Sua()
+        {
             string query = "UPDATE HocSinh SET HoTen = @HoTen , GioiTinh = @GioiTinh , " +
                            "NgaySinh = @NgaySinh , DiaChi = @DiaChi , Email = @Email " +
                            "WHERE MaHocSinh = @MaHocSinh";
@@ -76,7 +81,8 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // DELETE:
-        public static bool Xoa(string maHocSinh) {
+        public static bool Xoa(string maHocSinh)
+        {
             string query = "DELETE FROM HocSinh WHERE MaHocSinh = @MaHocSinh";
             SqlParameter[] parameters = new SqlParameter[] {
                 new SqlParameter("@MaHocSinh", maHocSinh)

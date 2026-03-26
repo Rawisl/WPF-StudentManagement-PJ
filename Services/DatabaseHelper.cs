@@ -29,7 +29,7 @@ namespace WPF_StudentManagement_Project.Services
                 {
                     command.Parameters.AddRange(parameters);
                 }
-                
+
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 adapter.Fill(data);
             }

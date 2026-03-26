@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WPF_StudentManagement_Project.Services
 {
-    internal class MonHoc
+    public class MonHoc
     {
         public required string MaMonHoc { get; set; }
         public string? TenMonHoc { get; set; }
@@ -43,6 +43,10 @@ namespace WPF_StudentManagement_Project.Services
                 danhSach.Add(mh);
             }
             return danhSach;
+        }
+        public override string ToString()
+        {
+            return TenMonHoc ?? MaMonHoc;
         }
     }
 }

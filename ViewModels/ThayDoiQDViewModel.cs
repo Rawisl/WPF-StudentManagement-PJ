@@ -6,37 +6,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WPF_StudentManagement_Project.Views;
 
 namespace WPF_StudentManagement_Project.ViewModels
 {
-    public partial class ThayDoiQDViewModel : ObservableObject
+    internal partial class MainViewModel : ObservableObject
     {
-        // 1. Cờ đánh dấu có thay đổi chưa lưu
-        public bool HasUnsavedChanges { get; set; } = false;
-
+        // Biến lưu trang hiện tại đang hiển thị trên ContentControl
         [ObservableProperty]
-        private int _tuoiMin;
-
-        // 2. Hàm này TỰ ĐỘNG CHẠY mỗi khi người dùng gõ số mới vào ô Tuổi Min
-        partial void OnTuoiMinChanged(int value)
-        {
-            HasUnsavedChanges = true;
-        }
-
-        // Tương tự cho TuoiMax, SiSoMax...
-        [ObservableProperty]
-        private int _tuoiMax;
-        partial void OnTuoiMaxChanged(int value) => HasUnsavedChanges = true;
+        private object _currentView;
 
         [RelayCommand]
-        private void LuuCaiDat()
+        private void Navigate(object destinationViewModel)
         {
-            // Code gọi Database lưu xuống DB của Long...
+            // 1. KIỂM TRA CHỐT CHẶN
+            // Nếu trang hiện tại ĐANG LÀ trang Cài Đặt (BM6) VÀ Cờ Dirty đang bật
+            if (CurrentView is ThayDoiQDViewModel caiDatVM && caiDatVM.HasUnsavedChanges)
+            {
+                // Bật Cảnh báo
+                MessageBoxResult result = MessageBox.Show(
+                    "Bạn có thay đổi chưa lưu! Bạn có chắc chắn muốn rời đi và MẤT dữ liệu vừa nhập không?",
+                    "Cảnh báo chưa lưu",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
 
-            // 3. Lưu xong thì "rửa sạch" cờ
-            HasUnsavedChanges = false;
-            MessageBox.Show("Lưu thành công!");
+                // Nếu người dùng chọn No (Không muốn rời đi)
+                if (result == MessageBoxResult.No)
+                {
+                    return; // Hủy lệnh chuyển trang, ở lại BM6
+                }
+
+                // Nếu chọn Yes (Chấp nhận mất dữ liệu để rời đi)
+                // Ép cờ về false để lần sau quay lại nó không bị kẹt
+                caiDatVM.HasUnsavedChanges = false;
+            }
+
+            // 2. NẾU AN TOÀN -> THỰC HIỆN CHUYỂN TRANG
+            CurrentView = destinationViewModel;
         }
     }
-
 }

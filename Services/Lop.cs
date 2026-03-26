@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WPF_StudentManagement_Project.Services
 {
-    internal class Lop
+    public class Lop
     {
         public required string MaLop { get; set; }
         public string? TenLop { get; set; }
@@ -16,14 +16,17 @@ namespace WPF_StudentManagement_Project.Services
         public int SiSo { get; set; }
 
         // READ
-        public static List<Lop> LayDanhSach() {
+        public static List<Lop> LayDanhSach()
+        {
             List<Lop> danhSach = new List<Lop>();
             string query = "SELECT * FROM Lop";
 
             DataTable data = DatabaseHelper.ExecuteQuery(query);
 
-            foreach (DataRow row in data.Rows) {
-                Lop lop = new Lop() {
+            foreach (DataRow row in data.Rows)
+            {
+                Lop lop = new Lop()
+                {
                     // Xử lý null
                     MaLop = row["MaLop"]?.ToString() ?? "",
                     TenLop = row["TenLop"] == DBNull.Value ? null : row["TenLop"]?.ToString(),
@@ -36,7 +39,8 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // CREATE
-        public bool Them() {
+        public bool Them()
+        {
             string query = "INSERT INTO Lop (MaLop, TenLop, Khoi, SiSo) " +
                            "VALUES ( @MaLop , @TenLop , @Khoi , @SiSo )";
 
@@ -51,7 +55,8 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // UPDATE
-        public bool Sua() {
+        public bool Sua()
+        {
             string query = "UPDATE Lop SET TenLop = @TenLop , Khoi = @Khoi , SiSo = @SiSo " +
                            "WHERE MaLop = @MaLop";
 
@@ -66,13 +71,19 @@ namespace WPF_StudentManagement_Project.Services
         }
 
         // DELETE
-        public static bool Xoa(string maLop) {
+        public static bool Xoa(string maLop)
+        {
             string query = "DELETE FROM Lop WHERE MaLop = @MaLop";
             SqlParameter[] parameters = {
                 new SqlParameter("@MaLop", maLop)
             };
 
             return DatabaseHelper.ExecuteNonQuery(query, parameters) > 0;
+        }
+        public override string ToString()
+        {
+            // Nếu TenLop có dữ liệu thì hiện TenLop, nếu null thì hiện MaLop
+            return TenLop ?? MaLop;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace WPF_StudentManagement_Project.Views
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
