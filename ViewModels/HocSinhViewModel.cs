@@ -1,32 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-//import mvvm lib
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Windows;
 
 namespace WPF_StudentManagement_Project.ViewModels
 {
-    //Dùng mvvm thì phải thêm 'partial' với kế thừa ObservableObject vào
-    internal partial class HocSinhViewModel : ObservableObject
+    public partial class HocSinhViewModel : ObservableObject
     {
-        //Khai báo các ô nhập liệu ở đây, viết chữ thường, có dấu gạch dưới
-        [ObservableProperty]
-        private string _tenHocSinh;
+        [ObservableProperty] private string _hoTen;
+        [ObservableProperty] private bool _isNam = true;
+        [ObservableProperty] private bool _isNu;
+        [ObservableProperty] private DateTime _ngaySinh = DateTime.Now;
+        [ObservableProperty] private string _diaChi;
+        [ObservableProperty] private string _email;
 
-        [ObservableProperty]
-        private int _tuoi;
-
-        //Viết logic khi bấm nút Lưu vào đây
         [RelayCommand]
-        private void LuuThongTin()
+        private void Luu()
         {
-            //Tự viết logic gọi QuyDinhService.TuoiMin ở đây
-            //MessageBox.Show($"Đang lưu học sinh: {TenHocSinh}");
+            string gioiTinh = IsNam ? "Nam" : "Nữ";
+            MessageBox.Show($"Đã lưu: {HoTen}\nGiới tính: {gioiTinh}\nSinh ngày: {NgaySinh:dd/MM/yyyy}", "Thông báo");
+        }
+
+        [RelayCommand]
+        private void Huy()
+        {
+            HoTen = string.Empty;
+            DiaChi = string.Empty;
+            Email = string.Empty;
+            NgaySinh = DateTime.Now;
+            IsNam = true;
         }
     }
 }
