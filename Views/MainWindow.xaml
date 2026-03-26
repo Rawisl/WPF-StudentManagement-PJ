@@ -3,9 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WPF_StudentManagement_Project.ViewModels"
+        xmlns:views="clr-namespace:WPF_StudentManagement_Project.Views"
         xmlns:local="clr-namespace:WPF_StudentManagement_Project"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:TrangChuViewModel}">
+            <views:TrangChuUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:HocSinhViewModel}">
+            <views:TiepNhanUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:DSLopViewModel}">
+            <views:LapDanhSachUC />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:TraCuuViewModel}">
+            <views:TraCuuUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:NhapDiemViewModel}">
+            <views:NhapDiemUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:BaoCaoViewModel}">
+            <views:BaoCaoUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:ThayDoiQDViewModel}">
+            <views:ThayDoiQDUC />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:CaiDatViewModel}">
+            <views:CaiDatUC />
+        </DataTemplate>
+
+
+    </Window.Resources>
+
     <Grid x:Name="MainGrid">
         <!-- Grid chia giữa Sidebar và UserContent -->
         <Grid.ColumnDefinitions>
@@ -13,15 +52,50 @@
             <ColumnDefinition x:Name="Main_Content" Width="*"/>
         </Grid.ColumnDefinitions>
         <!-- StackPanel tránh các button đè nhau -->
+        
         <StackPanel x:Name="StPn_Button" HorizontalAlignment="Center" Height="304" VerticalAlignment="Center" Width="230">
-            <Button x:Name="Btn_TrangChu" Content="Trang chủ" Click="Btn_TrangChu_Click"/>
-            <Button x:Name="Btn_TiepNhanHS" Content="Tiếp nhận học sinh" Click="Btn_TiepNhanHS_Click"/>
-            <Button x:Name="Btn_LapDSL" Content="Lập danh sách lớp" Click="Btn_LapDSL_Click"/>
-            <Button x:Name="Btn_NhapDiemMon" Content="Nhập điểm môn học" Click="Btn_NhapDiemMon_Click"/>
-            <Button x:Name="Btn_BaoCao" Content="Báo cáo tổng kết" Click="Btn_BaoCao_Click"/>
-            <Button x:Name="Btn_ThayDoiQD" Content="Thay đổi quy định" Click="Btn_ThayDoiQD_Click"/>
-            <Button x:Name="Btn_CaiDat" Content="Cài đặt" Click="Btn_CaiDat_Click"/>
+
+            <Button Content="Trang chủ" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding TrangChuVM}"/>
+
+            <Button Content="Tiếp nhận học sinh" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding HocSinhVM}"/>
+
+            <Button Content="Lập danh sách lớp" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding DSLopVM}"/>
+
+            <Button Content="Tra cứu học sinh" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding TraCuuVM}"/>
+
+            <Button Content="Nhập điểm môn học" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding NhapDiemVM}"/>
+
+            <Button Content="Báo cáo tổng kết" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding BaoCaoVM}"/>
+
+            <Button Content="Thay đổi quy định" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding ThayDoiQDVM}"/>
+
+            <Button Content="Cài đặt" 
+            Command="{Binding NavigateCommand}" 
+            CommandParameter="{Binding CaiDatVM}"/>
+
+
+
         </StackPanel>
-        <ContentControl x:Name="MainContent" Grid.Column="1" Content="MainContentControl" HorizontalAlignment="Center" Margin="0,204,0,0" VerticalAlignment="Top"/>
+        <ContentControl 
+            x:Name="MainContent" 
+            Grid.Column="1" 
+            Content="{Binding CurrentView}" 
+            HorizontalAlignment="Center" 
+            Margin="0,204,0,0" 
+            VerticalAlignment="Top"/>
     </Grid>
 </Window>

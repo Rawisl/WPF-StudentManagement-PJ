@@ -11,12 +11,12 @@ namespace WPF_StudentManagement_Project.Services
     public static class QuyDinhService
     {
         //tạm thời gán cứng, sau nâng cấp lên cho đọc file DB
-        public static int minTuoi = 15;
-        public static int maxTuoi = 20;
-        public static int maxSiSo = 40;
-        public static int maxSoLop = 9;
-        public static int maxMonHoc = 9;
-        public static double DiemDat = 5.0;
+        public static int minAge = 15;
+        public static int maxAge = 20;
+        public static int maxClassSize = 40;
+        public static int maxClass = 9;
+        public static int maxSubject = 9;
+        public static double passingGrade = 5.0;
         // Nhớ auto-start, review app.xaml.cs  
         /// <summary>
         /// Tải các quy định/tham số từ Database lên dùng toàn cục.
@@ -25,7 +25,8 @@ namespace WPF_StudentManagement_Project.Services
         {
             string query = "SELECT MaThamSo, GiaTri FROM THAMSO";
             DataTable dt = DatabaseHelper.ExecuteQuery(query);
-
+            // THÊM DÒNG NÀY ĐỂ TRÁNH CRASH APP:
+            if (dt == null) return;
             foreach (DataRow row in dt.Rows)
             {
                 string maThamSo = row["MaThamSo"]?.ToString() ?? "";
@@ -35,28 +36,28 @@ namespace WPF_StudentManagement_Project.Services
 
                 switch (maThamSo)
                 {
-                    case "minTuoi":
-                        minTuoi = (int)giaTri;
+                    case "MinAge":
+                        minAge = (int)giaTri;
                         break;
 
-                    case "maxTuoi":
-                        maxTuoi = (int)giaTri;
+                    case "MaxAge":
+                        maxAge = (int)giaTri;
                         break;
 
-                    case "maxSiSo":
-                        maxSiSo = (int)giaTri;
+                    case "MaxClassSize":
+                        maxClassSize = (int)giaTri;
                         break;
 
                     case "maxSoLop":
-                        maxSoLop = (int)giaTri;
+                        maxClass = (int)giaTri;
                         break;
 
                     case "maxMonHoc":
-                        maxMonHoc = (int)giaTri;
+                        maxSubject = (int)giaTri;
                         break;
 
-                    case "DiemDat":
-                        DiemDat = giaTri;
+                    case "PassingGrade":
+                        passingGrade = giaTri;
                         break;
                 }
             }

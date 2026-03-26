@@ -21,7 +21,7 @@ namespace WPF_StudentManagement_Project.ViewModels
         [ObservableProperty]
         private ObservableCollection<HocSinhItem> _danhSachLop;
 
-        public string SiSoText => $"Sĩ số: {DanhSachLop?.Count ?? 0} / {QuyDinhService.maxSiSo}";
+        public string SiSoText => $"Sĩ số: {DanhSachLop?.Count ?? 0} / {QuyDinhService.maxClassSize}";
 
         public DSLopViewModel()
         {
@@ -71,7 +71,7 @@ namespace WPF_StudentManagement_Project.ViewModels
         // Điều kiện: Sĩ số hiện tại phải nhỏ hơn maxSiSo
         private bool CanAddStudent()
         {
-            return DanhSachLop != null && DanhSachLop.Count < QuyDinhService.maxSiSo;
+            return DanhSachLop != null && DanhSachLop.Count < QuyDinhService.maxClassSize;
         }
 
         // Gắn điều kiện vào nút

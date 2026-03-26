@@ -74,9 +74,9 @@ namespace WPF_StudentManagement_Project.ViewModels
             int age = DateTime.Now.Year - value.Year;
             if (DateTime.Now.DayOfYear < value.DayOfYear) age--;
 
-            if (age < Services.QuyDinhService.minTuoi || age > Services.QuyDinhService.maxTuoi)
+            if (age < Services.QuyDinhService.minAge || age > Services.QuyDinhService.maxAge)
             {
-                TuoiErrorMessage = $"Lỗi: Tuổi học sinh ({age} tuổi) không hợp lệ.\nQuy định từ {Services.QuyDinhService.minTuoi} - {Services.QuyDinhService.maxTuoi} tuổi.";
+                TuoiErrorMessage = $"Lỗi: Tuổi học sinh ({age} tuổi) không hợp lệ.\nQuy định từ {Services.QuyDinhService.minAge} - {Services.QuyDinhService.maxAge} tuổi.";
             }
             else
             {
