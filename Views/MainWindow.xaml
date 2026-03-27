@@ -94,8 +94,8 @@
             x:Name="MainContent" 
             Grid.Column="1" 
             Content="{Binding CurrentView}" 
-            HorizontalAlignment="Center" 
-            Margin="0,204,0,0" 
-            VerticalAlignment="Top"/>
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch"
+            Margin="20"/>
     </Grid>
 </Window>

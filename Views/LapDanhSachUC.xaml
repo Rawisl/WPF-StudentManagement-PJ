@@ -13,10 +13,14 @@
         <viewmodels:DSLopViewModel/>
     </UserControl.DataContext>
 
-    <Grid>
-        <materialDesign:Card HorizontalAlignment="Left" Height="89" Margin="10,10,0,0" VerticalAlignment="Top" Width="774" BorderBrush="Black" BorderThickness="1" UniformCornerRadius="15">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <materialDesign:Card Grid.Row="0" Margin="0,0,0,20" Padding="15,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" UniformCornerRadius="15">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Label Content="Khối:" FontSize="20" Foreground="Black" VerticalAlignment="Center"/>
                 <ComboBox x:Name="ChonKhoiCB" Width="100" Height="32" Margin="5,0,20,0" VerticalAlignment="Center"/>
 
@@ -26,8 +30,8 @@
                 <TextBlock Text="{Binding SiSoText}" Foreground="Black" FontSize="20" VerticalAlignment="Center" Margin="0,0,30,0"/>
 
                 <Button Content="+ Thêm học sinh" 
-        Command="{Binding AddStudentCommand}" 
-        FontSize="16" Margin="90,0,0,0">
+                        Command="{Binding AddStudentCommand}" 
+                        FontSize="16" Margin="90,0,0,0">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Background" Value="#FF270EDC"/>
@@ -35,7 +39,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="15,5">
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
                                     </ControlTemplate>
@@ -54,8 +58,9 @@
             </StackPanel>
         </materialDesign:Card>
 
-        <DataGrid HorizontalAlignment="Center" Height="300" Margin="0,115,0,0" VerticalAlignment="Top" Width="774" 
-                  ItemsSource="{Binding DanhSachLop}" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                  ItemsSource="{Binding DanhSachLop}" AutoGenerateColumns="False" CanUserAddRows="False"
+                  Background="White" BorderBrush="#F0F0F0" BorderThickness="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="STT" Binding="{Binding STT}" Width="50"/>
                 <DataGridTextColumn Header="Mã HS" Binding="{Binding MaHS}" Width="100" Foreground="#FF0D55F3"/>
@@ -70,7 +75,6 @@
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
                                         <Setter Property="Visibility" Value="Hidden"/>
-
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                                                 <Setter Property="Visibility" Value="Visible"/>
@@ -80,28 +84,14 @@
                                 </StackPanel.Style>
 
                                 <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                        CommandParameter="{Binding}"
-                        Content="✎" 
-                        FontSize="18"
-                        Foreground="#FF0D55F3" 
-                        Background="Transparent" 
-                        BorderThickness="0"
-                        Width="30" Height="30"
-                        Margin="0,0,5,0"
-                        Cursor="Hand"
-                        ToolTip="Sửa thông tin"/>
+                                        CommandParameter="{Binding}"
+                                        Content="✎" FontSize="18" Foreground="#FF0D55F3" Background="Transparent" 
+                                        BorderThickness="0" Width="30" Height="30" Margin="0,0,5,0" Cursor="Hand" ToolTip="Sửa thông tin"/>
 
                                 <Button Command="{Binding DataContext.XoaStudentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                        CommandParameter="{Binding}"
-                        Content="✕" 
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Foreground="Red" 
-                        Background="Transparent" 
-                        BorderThickness="0"
-                        Width="30" Height="30"
-                        Cursor="Hand"
-                        ToolTip="Xóa học sinh"/>
+                                        CommandParameter="{Binding}"
+                                        Content="✕" FontSize="16" FontWeight="Bold" Foreground="Red" Background="Transparent" 
+                                        BorderThickness="0" Width="30" Height="30" Cursor="Hand" ToolTip="Xóa học sinh"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
