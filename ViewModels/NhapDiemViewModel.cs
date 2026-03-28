@@ -16,14 +16,48 @@ public partial class HocSinhDiemDisplay : ObservableObject
     public string MaHocSinh { get; set; } // ID ẩn để lưu CSDL
     public string HoTen { get; set; }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(DiemTB))]
+    // === ĐIỂM 15 PHÚT - Ràng buộc 1-10 ===
     private double? _diem15Phut;
+    public double? Diem15Phut
+    {
+        get => _diem15Phut;
+        set
+        {
+            if (value.HasValue)
+            {
+                if (value.Value < 0) value = 0;
+                if (value.Value > 10) value = 10;
+            }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(DiemTB))]
+            // Nếu giá trị có thay đổi thì gán và báo cho Giao diện để tính điểm TB
+            if (SetProperty(ref _diem15Phut, value))
+            {
+                OnPropertyChanged(nameof(DiemTB));
+            }
+        }
+    }
+
+    // === ĐIỂM 1 TIẾT ===
     private double? _diem1Tiet;
+    public double? Diem1Tiet
+    {
+        get => _diem1Tiet;
+        set
+        {
+            if (value.HasValue)
+            {
+                if (value.Value < 0) value = 0;
+                if (value.Value > 10) value = 10;
+            }
 
+            if (SetProperty(ref _diem1Tiet, value))
+            {
+                OnPropertyChanged(nameof(DiemTB));
+            }
+        }
+    }
+
+    // === CỘT ĐIỂM TB
     public double? DiemTB
     {
         get
@@ -101,7 +135,7 @@ public partial class NhapDiemViewModel : ObservableObject
 
             if (dt == null || dt.Rows.Count == 0)
             {
-                MessageBox.Show("Không tìm thấy học sinh nào trong Lớp/Học kỳ này.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                NotificationHelper.ShowWarning("Không tìm thấy học sinh nào trong Lớp/Học kỳ này!");
                 return;
             }
 
@@ -124,7 +158,7 @@ public partial class NhapDiemViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Lỗi Database:\n{ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            NotificationHelper.ShowError($"Lỗi Database:\n{ex.Message}");
         }
     }
 
@@ -136,7 +170,7 @@ public partial class NhapDiemViewModel : ObservableObject
 
         if (DanhSachHocSinh.Count == 0)
         {
-            MessageBox.Show("Bảng điểm đang trống, không có gì để lưu!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            NotificationHelper.ShowWarning("Bảng điểm đang trống, không có gì để lưu!");
             return;
         }
 
@@ -168,7 +202,6 @@ public partial class NhapDiemViewModel : ObservableObject
                 }
             }
         }
-
-        MessageBox.Show($"Đã lưu thành công điểm của {thanhCong} học sinh.\nThất bại (hoặc điểm không hợp lệ): {thatBai}", "Hoàn tất", MessageBoxButton.OK, MessageBoxImage.Information);
+        NotificationHelper.ShowSuccess("Đã lưu thành công!");
     }
 }

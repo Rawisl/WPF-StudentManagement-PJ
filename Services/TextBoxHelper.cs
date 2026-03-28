@@ -51,16 +51,16 @@ namespace WPF_StudentManagement_Project.Services
 
         private static void BlockNonDecimal(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9.,]+");
+            Regex regex = new Regex("[^0-9.]+");
             if (regex.IsMatch(e.Text))
             {
                 e.Handled = true;
                 return;
             }
 
-            if (sender is TextBox textBox && (e.Text == "." || e.Text == ","))
+            if (sender is TextBox textBox && (e.Text == "."))
             {
-                if (textBox.Text.Contains(".") || textBox.Text.Contains(","))
+                if (textBox.Text.Contains("."))
                     e.Handled = true;
             }
         }
