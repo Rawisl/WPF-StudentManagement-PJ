@@ -6,11 +6,8 @@
              xmlns:local="clr-namespace:WPF_StudentManagement_Project.Views"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="900"
-             xmlns:vm="clr-namespace:WPF_StudentManagement_Project.ViewModels">
-
-    <UserControl.DataContext>
-        <vm:NhapDiemViewModel />
-    </UserControl.DataContext>
+             xmlns:vm="clr-namespace:WPF_StudentManagement_Project.ViewModels"
+             xmlns:helpers="clr-namespace:WPF_StudentManagement_Project.Services">
 
     <UserControl.Resources>
         <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
@@ -232,30 +229,25 @@
 
                         <DataGridTextColumn Header="Họ và tên" Binding="{Binding HoTen}" IsReadOnly="True" Width="*" />
 
-                        <DataGridTextColumn Header="Điểm 15'" Binding="{Binding Diem15Phut,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="120">
+                        <DataGridTextColumn Header="Điểm 15'" 
+                                            Binding="{Binding Diem15Phut}" 
+                                            IsReadOnly="False" 
+                                            Width="120">
                             <DataGridTextColumn.EditingElementStyle>
                                 <Style TargetType="TextBox">
-                                    <EventSetter Event="PreviewTextInput" Handler="ChiChoPhepNhapSo_PreviewTextInput"/>
+                                    <Setter 
+                                        Property="helpers:TextBoxHelper.IsDecimalOnly" 
+                                        Value="True"/>
                                 </Style>
                             </DataGridTextColumn.EditingElementStyle>
-                            <DataGridTextColumn.CellStyle>
-                                <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
-                                    <Setter Property="Background" Value="#F8F9FA"/>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="Điểm 1 tiết" Binding="{Binding Diem1Tiet,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Width="120">
+                        <DataGridTextColumn Header="Điểm 1 tiết" Binding="{Binding Diem1Tiet}" IsReadOnly="False" Width="120">
                             <DataGridTextColumn.EditingElementStyle>
                                 <Style TargetType="TextBox">
-                                    <EventSetter Event="PreviewTextInput" Handler="ChiChoPhepNhapSo_PreviewTextInput"/>
+                                    <Setter Property="helpers:TextBoxHelper.IsDecimalOnly" Value="True"/>
                                 </Style>
                             </DataGridTextColumn.EditingElementStyle>
-                            <DataGridTextColumn.CellStyle>
-                                <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
-                                    <Setter Property="Background" Value="#F8F9FA"/>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Điểm TB" Binding="{Binding DiemTB,StringFormat={}{0:F1}}" IsReadOnly="True" Width="120" Foreground="Gray"/>

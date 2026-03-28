@@ -25,16 +25,6 @@ namespace WPF_StudentManagement_Project.Views
         {
             InitializeComponent();
         }
-        private void GetListButton_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
-
-        // HÀM CHẶN GÕ CHỮ
-        private void ChiChoPhepNhapSo_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9.,]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
     }
 }

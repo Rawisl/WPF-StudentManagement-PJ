@@ -17,6 +17,7 @@
             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Thay đổi quy định" VerticalAlignment="Center" FontSize="36" TextAlignment="Center" FontWeight="Bold"/>
             <Button x:Name="SaveBtn"
                     Content="Lưu thay đổi"
+                    Command="{Binding LuuCaiDatCommand}"
                     Click="SaveBtn_Click"
                     HorizontalAlignment="Right"
                     Height="50" 
@@ -56,7 +57,8 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="40"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="txtTuoiMin" 
+                                        <TextBox x:Name="txtTuoiMin"
+                                                 Text="{Binding MinAge, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderThickness="0" 
                                                  Background="Transparent" 
                                                  VerticalContentAlignment="Center" 
@@ -80,6 +82,7 @@
                                             <ColumnDefinition Width="40"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBox x:Name="txtTuoiMax"
+                                                 Text="{Binding MaxAge, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderThickness="0"
                                                  Background="Transparent"
                                                  VerticalContentAlignment="Center"
@@ -110,6 +113,7 @@
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox x:Name="txtSiSoMax"
+                                         Text="{Binding MaxClassSize, UpdateSourceTrigger=PropertyChanged}"
                                          BorderThickness="0"
                                          Background="Transparent"
                                          VerticalContentAlignment="Center"
@@ -167,7 +171,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Name="txtPassScore" 
+                                <TextBox x:Name="txtPassScore"
+                                         Text="{Binding PassingGrade, UpdateSourceTrigger=PropertyChanged}"
                                          BorderThickness="0" 
                                          Background="Transparent" 
                                          VerticalContentAlignment="Center" 
