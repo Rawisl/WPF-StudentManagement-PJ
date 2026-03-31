@@ -18,14 +18,23 @@ namespace WPF_StudentManagement_Project.ViewModels
     // ViewModel chính cho màn hình Tiếp nhận học sinh
     public partial class HocSinhViewModel : ObservableObject
     {
-        [ObservableProperty] private string _hoTen = string.Empty;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
+        private string _hoTen = string.Empty;
+
         [ObservableProperty] private bool _isNam = true;
         [ObservableProperty] private bool _isNu;
-        [ObservableProperty] private string _diaChi = string.Empty;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
+        private string _diaChi = string.Empty;
+
         [ObservableProperty] private string _email = string.Empty;
 
         // Thông báo lỗi nếu sai tuổi quy định
-        [ObservableProperty] private string _tuoiErrorMessage = string.Empty;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LuuCommand))]
+        private string _tuoiErrorMessage = string.Empty;
 
         // Danh sách lớp nạp từ Database
         [ObservableProperty]
@@ -64,7 +73,7 @@ namespace WPF_StudentManagement_Project.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi tải danh sách lớp:\n{ex.Message}", "Lỗi DB", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificationHelper.ShowError($"Lỗi tải danh sách lớp:\n{ex.Message}");
             }
         }
 
@@ -87,7 +96,10 @@ namespace WPF_StudentManagement_Project.ViewModels
         // Kiểm tra điều kiện để kích hoạt nút Lưu
         private bool CanLuu()
         {
-            return string.IsNullOrEmpty(TuoiErrorMessage) && LopDuocChon != null;
+            // Bắt buộc nhập Họ Tên và Địa Chỉ, và không có lỗi tuổi
+            return string.IsNullOrEmpty(TuoiErrorMessage) &&
+                   !string.IsNullOrWhiteSpace(HoTen) &&
+                   !string.IsNullOrWhiteSpace(DiaChi);
         }
 
         [RelayCommand(CanExecute = nameof(CanLuu))]
@@ -113,19 +125,17 @@ namespace WPF_StudentManagement_Project.ViewModels
             {
                 if (hsMoi.Them())
                 {
-                    MessageBox.Show($"Tiếp nhận học sinh thành công!\nMã HS: {maHSMoi}\nHọ Tên: {HoTen}\nVào lớp: {LopDuocChon.TenLop}",
-                                    "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    NotificationHelper.ShowSuccess($"Tiếp nhận học sinh thành công!\nMã HS: {maHSMoi}\nHọ Tên: {HoTen}");
                     Huy();
                 }
                 else
                 {
-                    MessageBox.Show("Không thể lưu học sinh vào hệ thống. Vui lòng thử lại.",
-                                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    NotificationHelper.ShowWarning("Không thể lưu học sinh vào hệ thống. Vui lòng thử lại.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi CSDL:\n{ex.Message}", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificationHelper.ShowError($"Lỗi CSDL:\n{ex.Message}");
             }
         }
 
@@ -138,6 +148,9 @@ namespace WPF_StudentManagement_Project.ViewModels
             NgaySinh = DateTime.Now;
             IsNam = true;
             if (DanhSachLop.Count > 0) LopDuocChon = DanhSachLop[0];
+
+            // Xóa luôn câu báo lỗi đỏ nếu có
+            TuoiErrorMessage = string.Empty;
         }
     }
 }

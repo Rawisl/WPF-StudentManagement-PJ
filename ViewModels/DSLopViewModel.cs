@@ -25,33 +25,24 @@ namespace WPF_StudentManagement_Project.ViewModels
 
         public DSLopViewModel()
         {
-            // 1. Khởi tạo danh sách rỗng
             DanhSachLop = new ObservableCollection<HocSinhItem>();
-
-            // 2. Load dữ liệu THẬT từ CSDL của Long
             LoadDataFromDatabase();
 
-            // Mỗi khi danh sách thay đổi (Thêm/Xóa)
             DanhSachLop.CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(SiSoText)); // Cập nhật chữ Sĩ số
-                AddStudentCommand.NotifyCanExecuteChanged(); // Đánh giá lại xem nút Thêm có được bật không
+                OnPropertyChanged(nameof(SiSoText));
+                AddStudentCommand.NotifyCanExecuteChanged();
             };
         }
 
-        // Hàm hỗ trợ load dữ liệu
         private void LoadDataFromDatabase()
         {
             DanhSachLop.Clear();
-
             try
             {
-                // Gọi hàm LayDanhSach() từ file HocSinh.cs
                 var listHS = Services.HocSinh.LayDanhSach();
-
                 int stt = 1;
                 foreach (var hs in listHS)
                 {
-                    // Chuyển đổi từ Model của Long sang ViewModel (Item) để hiển thị lên màn hình
                     DanhSachLop.Add(new HocSinhItem
                     {
                         STT = stt++,
@@ -64,17 +55,15 @@ namespace WPF_StudentManagement_Project.ViewModels
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Lỗi kết nối CSDL khi tải danh sách:\n{ex.Message}", "Lỗi Database", MessageBoxButton.OK, MessageBoxImage.Error);
+                NotificationHelper.ShowError($"Lỗi kết nối CSDL:\n{ex.Message}");
             }
         }
 
-        // Điều kiện: Sĩ số hiện tại phải nhỏ hơn maxSiSo
         private bool CanAddStudent()
         {
             return DanhSachLop != null && DanhSachLop.Count < QuyDinhService.maxClassSize;
         }
 
-        // Gắn điều kiện vào nút
         [RelayCommand(CanExecute = nameof(CanAddStudent))]
         private void AddStudent()
         {
@@ -85,7 +74,6 @@ namespace WPF_StudentManagement_Project.ViewModels
             Application.Current.MainWindow.Effect = null;
         }
 
-        //Lệnh Sửa học sinh
         [RelayCommand]
         private void EditStudent(HocSinhItem hs)
         {
@@ -93,49 +81,37 @@ namespace WPF_StudentManagement_Project.ViewModels
             {
                 Application.Current.MainWindow.Effect = new BlurEffect { Radius = 8 };
                 Views.SuaHocSinhWnd popup = new Views.SuaHocSinhWnd(hs);
-
                 popup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
                 popup.ShowDialog();
                 Application.Current.MainWindow.Effect = null;
             }
         }
 
-        //Lệnh Xóa học sinh
         [RelayCommand]
         private void XoaStudent(HocSinhItem hs)
         {
             if (hs != null)
             {
-                //Hiện hộp thoại hỏi
-                var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa học sinh '{hs.HoTen}' khỏi hệ thống không?\nHành động này không thể hoàn tác!",
-                                             "Xác nhận xóa",
-                                             MessageBoxButton.YesNo,
-                                             MessageBoxImage.Warning);
+                bool isChonOK = NotificationHelper.ShowConfirm($"Bạn có chắc chắn muốn xóa học sinh '{hs.HoTen}' khỏi hệ thống không?\nHành động này không thể hoàn tác!");
 
-                // Nếu người dùng bấm Yes
-                if (result == MessageBoxResult.Yes)
+                if (isChonOK)
                 {
                     try
                     {
-                        // Gọi hàm Xóa từ file HocSinh.cs
                         bool isDeleted = Services.HocSinh.Xoa(hs.MaHS);
-
                         if (isDeleted)
                         {
-                            // Xóa trên giao diện (ObservableCollection sẽ tự update UI)
                             DanhSachLop.Remove(hs);
-                            MessageBox.Show("Xóa học sinh thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            NotificationHelper.ShowSuccess("Xóa học sinh thành công!");
                         }
                         else
                         {
-                            MessageBox.Show("Xóa thất bại! Không tìm thấy mã học sinh trong CSDL.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                            NotificationHelper.ShowWarning("Xóa thất bại! Không tìm thấy mã học sinh.");
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        // Bắt lỗi nếu học sinh đang có điểm số (vướng khóa ngoại)
-                        MessageBox.Show($"Không thể xóa do lỗi CSDL:\n{ex.Message}", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
+                        NotificationHelper.ShowError($"Không thể xóa do lỗi CSDL:\n{ex.Message}");
                     }
                 }
             }
