@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using WPF_StudentManagement_Project.Services;
 using WPF_StudentManagement_Project.ViewModels;
 
 namespace WPF_StudentManagement_Project.Views
@@ -38,7 +39,7 @@ namespace WPF_StudentManagement_Project.Views
                 }
                 else
                 {
-                    MessageBox.Show("Vui lòng nhập ngày sinh đúng định dạng dd/MM/yyyy!", "Lỗi định dạng", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    NotificationHelper.ShowWarning("Vui lòng nhập ngày sinh đúng định dạng dd/MM/yyyy!");
                     return;
                 }
 
@@ -50,12 +51,12 @@ namespace WPF_StudentManagement_Project.Views
                     _hsItemDangSua.GioiTinh = hsGoc.GioiTinh;
                     _hsItemDangSua.NgaySinh = hsGoc.NgaySinh.ToString("dd/MM/yyyy");
 
-                    MessageBox.Show("Cập nhật thông tin học sinh thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    NotificationHelper.ShowSuccess("Cập nhật thông tin học sinh thành công!");
                     this.Close(); // Đóng Popup
                 }
                 else
                 {
-                    MessageBox.Show("Có lỗi xảy ra khi lưu xuống CSDL!", "Lỗi Database", MessageBoxButton.OK, MessageBoxImage.Error);
+                    NotificationHelper.ShowError("Có lỗi xảy ra khi lưu xuống CSDL!");
                 }
             }
         }
